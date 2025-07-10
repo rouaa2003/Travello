@@ -1,0 +1,101 @@
+.profile-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profile-container h2,
+.profile-container h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-view p {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.profile-view button,
+.profile-edit button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  margin-top: 15px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.profile-view button:hover,
+.profile-edit button:hover {
+  background-color: #0056b3;
+}
+
+.profile-edit label {
+  display: block;
+  margin: 10px 0 5px 0;
+  font-weight: 600;
+}
+
+.profile-edit input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.buttons button {
+  flex: 1;
+}
+
+.success-msg {
+  color: green;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.error-msg {
+  color: red;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.bookings-list {
+  margin-top: 20px;
+}
+
+.booking-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background: #fafafa;
+}
+
+.booking-card h4 {
+  margin: 0 0 8px 0;
+}
+
+.booking-card button {
+  background-color: #dc3545;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.booking-card button:hover {
+  background-color: #b52a37;
+}

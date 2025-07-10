@@ -1,0 +1,59 @@
+.trip-details {
+  padding: 40px 20px;
+  max-width: 600px;
+  margin: auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: right;
+  direction: rtl;
+}
+
+.trip-details h2 {
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+.trip-details p {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+.booking-form {
+  margin-top: 30px;
+  text-align: right;
+}
+
+.booking-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.booking-form select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.booking-form button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.booking-form button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.success-msg {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
+}

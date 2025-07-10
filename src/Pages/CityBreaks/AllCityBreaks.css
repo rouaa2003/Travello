@@ -1,0 +1,79 @@
+.all-city-breaks {
+  padding: 40px 20px;
+  background-color: #f7f7f7;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.section-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.trips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+.trip-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 300px;
+  transition: transform 0.3s ease;
+}
+
+.trip-card:hover {
+  transform: translateY(-5px);
+}
+
+.trip-card h3 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  color: #0066cc;
+}
+
+.trip-card p {
+  margin: 5px 0;
+  color: #555;
+  font-size: 16px;
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 22px;
+  }
+
+  .trip-card {
+    padding: 16px;
+  }
+
+  .trip-card h3 {
+    font-size: 18px;
+  }
+
+  .trip-card p {
+    font-size: 14px;
+  }
+}
+.book-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.book-btn:hover {
+  background-color: #0056b3;
+}
