@@ -1,0 +1,15 @@
+.hospital-page .second-hero-section {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.50)), url(../../Assets/Images/hospital-hero-bg.jpg);
+}
+
+.hospital-page .holiday-plan-section {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0.75)), url(../../Assets/Images/destinations-holiday-plan-bg.jpg);
+}
+
+.hospital-page .need-inspiration-section {
+    background-image: url(../../Assets/Images/destinations-need-inspiration-bg.jpg);
+}
+
+.hospital-page .recommended-section .container {
+    background-image: url(../../Assets/Images/destinations-recommended-section-bg.jpg);
+}

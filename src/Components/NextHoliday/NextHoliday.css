@@ -1,0 +1,37 @@
+.next-holiday-section .card {
+    height: 250px;
+    background-position: center;
+    background-size: cover;
+}
+
+.next-holiday-section .card:hover {
+    cursor: pointer;
+}
+
+.next-holiday-section .card h5 {
+    font-size: 2rem;
+}
+
+.next-holiday-section .row .col-md-6:first-of-type .card {
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.60)), url(../../Assets/Images/next1.jpg);
+}
+
+.next-holiday-section .row .col-md-6:nth-of-type(2) .card {
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.60)), url(../../Assets/Images/next2.jpg);
+}
+
+.next-holiday-section .row .col-md-6:nth-of-type(3) .card {
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.70)), url(../../Assets/Images/next3.jpg);
+}
+
+.next-holiday-section .row .col-md-6:nth-of-type(4) .card {
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.50)), url(../../Assets/Images/next4.jpg);
+}
+
+.next-holiday-section .row .col-md-6:nth-of-type(5) .card {
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.50)), url(../../Assets/Images/next5.jpg);
+}
+
+.next-holiday-section .row .col-md-6:nth-of-type(6) .card {
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.50)), url(../../Assets/Images/next6.jpg);
+}

@@ -1,0 +1,249 @@
+.city-break-section span {
+    font-size: 1.6rem;
+}
+/* تنسيقات معرض الصور */
+.image-gallery-container {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .main-image-wrapper {
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .main-gallery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .main-gallery-image:hover {
+    transform: scale(1.02);
+  }
+  
+  .nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+  }
+  
+  .prev-button {
+    left: 15px;
+  }
+  
+  .next-button {
+    right: 15px;
+  }
+  
+  .thumbnail-container {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+  
+  .thumbnail {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+  }
+  
+  .thumbnail:hover {
+    border-color: #28a745;
+    transform: scale(1.05);
+  }
+  
+  .thumbnail.active {
+    border-color: #28a745;
+    transform: scale(1.1);
+  }
+
+/* تنسيقات النافذة المنبثقة المخصصة */
+.custom-modal {
+  max-height: 80vh;
+}
+
+.custom-modal-body {
+  padding: 20px;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.modal-content-wrapper {
+  display: flex;
+  gap: 20px;
+  height: 100%;
+}
+
+/* الجانب الأيسر - الصورة */
+.image-side {
+  flex: 1;
+  min-width: 50%;
+}
+
+.main-image-wrapper {
+  position: relative;
+  margin-bottom: 15px;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.main-gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.prev-button {
+  left: 15px;
+}
+
+.next-button {
+  right: 15px;
+}
+
+.thumbnail-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.thumbnail-wrapper {
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.thumbnail-wrapper.active {
+  border-color: #d4af37;
+}
+
+.thumbnail-image {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* الجانب الأيمن - المعلومات */
+.info-side {
+ 
+    flex: 1;
+    min-width: 50%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* هذا السطر هو الأهم للتوسيط العمودي */
+    height: 100%; /* تأكد من أن القسم يأخذ كامل الارتفاع */
+  
+}
+
+.meal-info-item {
+  margin-top: 50px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.meal-label {
+  color: var(--primary-color);
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+
+.meal-value {
+  color:black;
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+
+.price-value {
+  color: black;
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+
+.meal-description {
+  color: #555;
+  line-height: 1.6;
+  margin-top: 20px;
+}
+
+.meal-features {
+  margin-top: 20px;
+}
+
+.meal-features h4 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.meal-features ul {
+  padding-right: 20px;
+}
+
+.meal-features li {
+  margin-bottom: 8px;
+}
+
+/* للهواتف المحمولة */
+@media (max-width: 768px) {
+  .modal-content-wrapper {
+    flex-direction: column;
+  }
+  
+  .image-side, .info-side {
+    min-width: 100%;
+  }
+  
+  .main-image-wrapper {
+    height: 200px;
+  }
+  
+  .info-side {
+    margin-top: 20px;
+    padding: 0;
+  }
+}

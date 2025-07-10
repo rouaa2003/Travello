@@ -1,0 +1,42 @@
+.image-div {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 0.5s ease;
+  }
+  
+  .image-title {
+    position: absolute;
+    bottom:-10px;
+    left: 0;
+    right: 0;
+    color: white;
+    text-align: center;
+    
+    background: rgba(0,0,0,0.4);
+    
+    border-radius: 5px;
+  }
+  
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.7);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .nav-btn.left { left: 10px; }
+  .nav-btn.right { right: 10px; }
+@media screen and (max-width: 576px) {
+    .everyone-holidays-section .card {
+        height: 300px;
+    }
+}
