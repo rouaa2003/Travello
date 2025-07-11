@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../firebase'; // عدّل المسار حسب موقعك
 import { collection, getDocs } from 'firebase/firestore';
-import './PlacesPage.css'; // ملف CSS للتنسيق
+import './PlacesPage.css';
 
 function PlacesPage() {
   const [places, setPlaces] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(6); // عدد الأماكن المرئية حاليا
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,13 +25,17 @@ function PlacesPage() {
     fetchPlaces();
   }, []);
 
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + 6);
+  };
+
   if (loading) return <p style={{ textAlign: 'center', marginTop: 50 }}>جاري التحميل...</p>;
 
   return (
     <div className="places-page">
       <h2 className="page-title">الأماكن المشهورة</h2>
       <div className="places-grid">
-        {places.map(place => (
+        {places.slice(0, visibleCount).map(place => (
           <div key={place.id} className="place-card">
             {place.imgUrl ? (
               <img src={place.imgUrl} alt={place.name} className="place-image" />
@@ -46,6 +51,15 @@ function PlacesPage() {
           </div>
         ))}
       </div>
+
+      {/* زر تحميل المزيد يظهر فقط إذا لم تُعرض كل الأماكن */}
+      {visibleCount < places.length && (
+        <div style={{ textAlign: 'center', marginTop: 20 }}>
+          <button onClick={handleLoadMore} className="load-more-button">
+            تحميل المزيد
+          </button>
+        </div>
+      )}
     </div>
   );
 }

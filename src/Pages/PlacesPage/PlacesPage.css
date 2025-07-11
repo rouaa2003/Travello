@@ -82,3 +82,22 @@
   font-size: 13px;
   color: #888;
 }
+.load-more-button {
+  background-color: #007bff; /* لون أزرق */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.load-more-button:hover {
+  background-color: #0056b3; /* لون أزرق غامق عند المرور */
+}
+
+.load-more-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}

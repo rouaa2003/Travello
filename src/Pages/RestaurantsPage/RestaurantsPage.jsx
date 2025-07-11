@@ -4,6 +4,7 @@ import { collection, getDocs } from 'firebase/firestore';
 
 function RestaurantsPage() {
   const [restaurants, setRestaurants] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(6); // عدد المطاعم المرئية حاليا
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,15 +23,17 @@ function RestaurantsPage() {
     fetchRestaurants();
   }, []);
 
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + 6);
+  };
+
   if (loading) return <p style={{ textAlign: 'center', marginTop: 50 }}>جاري التحميل...</p>;
 
   return (
     <div>
-      
-
       {/* قائمة المطاعم */}
       <div style={{ maxWidth: 1000, margin: '20px auto', padding: '0 15px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
-        {restaurants.map(r => (
+        {restaurants.slice(0, visibleCount).map(r => (
           <div key={r.id} style={{ border: '1px solid #ddd', borderRadius: 8, overflow: 'hidden', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
             {r.imgUrl ? (
               <img
@@ -52,6 +55,29 @@ function RestaurantsPage() {
           </div>
         ))}
       </div>
+
+      {/* زر تحميل المزيد يظهر فقط إذا لم تُعرض كل المطاعم */}
+      {visibleCount < restaurants.length && (
+        <div style={{ textAlign: 'center', marginTop: 20 }}>
+          <button
+            onClick={handleLoadMore}
+            style={{
+              backgroundColor: '#007bff',
+              color: 'white',
+              border: 'none',
+              padding: '10px 20px',
+              fontSize: 16,
+              borderRadius: 6,
+              cursor: 'pointer',
+              transition: 'background-color 0.3s ease'
+            }}
+            onMouseOver={e => (e.currentTarget.style.backgroundColor = '#0056b3')}
+            onMouseOut={e => (e.currentTarget.style.backgroundColor = '#007bff')}
+          >
+            تحميل المزيد
+          </button>
+        </div>
+      )}
     </div>
   );
 }

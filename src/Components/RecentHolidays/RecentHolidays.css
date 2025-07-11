@@ -1,33 +1,60 @@
-.recent-holidays .row .col-lg-6:first-of-type .img-div {
-    background-image: url(../../Assets/Images/mashkita.jpg);
+.recent-holidays {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 15px;
+  text-align: center;
 }
 
-.recent-holidays .row .col-lg-6:nth-last-of-type(2) .img-div {
-    background-image: url(../../Assets/Images/darkosh.jpg);
+.trips-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-.recent-holidays .row .col-lg-6:nth-last-of-type(3) .img-div {
-    background-image: url(../../Assets/Images/babahmar.jpg);
+.trip-card {
+  width: 260px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  cursor: pointer;
 }
 
-.recent-holidays .row .col-lg-6:last-of-type .img-div {
-    background-image: url(../../Assets/Images/jaabar.jpg);
+.trip-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-.recent-holidays .img-div {
-    background-size: cover;
-    background-position: center;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+.trip-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
 }
 
-.recent-holidays .h5,
-.recent-holidays .price {
-    font-size: 1.5rem;
+.trip-info {
+  padding: 15px;
+  text-align: right;
 }
 
-@media screen and (max-width: 576px) {
-    .recent-holidays .img-div {
-        height: 200px;
-    }
+.trip-info h3 {
+  margin: 0 0 10px;
+  color: #222;
+}
+
+.trip-info p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.trip-image.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+  background: #eee;
+  color: #999;
+  font-size: 14px;
 }

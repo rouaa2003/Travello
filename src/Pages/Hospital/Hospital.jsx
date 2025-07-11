@@ -13,6 +13,7 @@ import { collection, getDocs } from 'firebase/firestore';
 
 function Hospital() {
   const [hospitals, setHospitals] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(6); // عدد المستشفيات المرئية حالياً
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,6 +33,10 @@ function Hospital() {
     fetchHospitals();
   }, []);
 
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + 6);
+  };
+
   return (
     <div className='hospital-page'>
       <SecondHeroSection secondHeroTitle='Find The Right Hospital' />
@@ -39,32 +44,89 @@ function Hospital() {
       {loading ? (
         <p style={{ textAlign: 'center', marginTop: 40 }}>جاري التحميل...</p>
       ) : (
-        <div className="hospitals-list" style={{ maxWidth: 1100, margin: '20px auto', padding: '0 15px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
-          {hospitals.map(h => (
-            <div key={h.id} style={{ border: '1px solid #ccc', borderRadius: 8, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-              {h.imgUrl ? (
-                <img src={h.imgUrl} alt={h.name} style={{ width: '100%', height: 180, objectFit: 'cover' }} />
-              ) : (
-                <div style={{ width: '100%', height: 180, backgroundColor: '#eee', display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#999' }}>
-                  لا توجد صورة
-                </div>
-              )}
-              <div style={{ padding: 15 }}>
-                <h3 style={{ marginBottom: 10 }}>{h.name}</h3>
-                <p style={{ fontSize: 14, color: '#555', marginBottom: 10 }}>{h.description}</p>
-                <p style={{ fontSize: 13, color: '#888' }}>المحافظة: {h.cityId}</p>
-                {h.isPopular && (
-                  <span style={{ display: 'inline-block', marginTop: 10, padding: '4px 10px', backgroundColor: '#ff5722', color: '#fff', borderRadius: 15, fontSize: 12 }}>
-                    شائع
-                  </span>
+        <>
+          <div
+            className="hospitals-list"
+            style={{
+              maxWidth: 1100,
+              margin: '20px auto',
+              padding: '0 15px',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap: 20
+            }}
+          >
+            {hospitals.slice(0, visibleCount).map(h => (
+              <div
+                key={h.id}
+                style={{ border: '1px solid #ccc', borderRadius: 8, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+              >
+                {h.imgUrl ? (
+                  <img src={h.imgUrl} alt={h.name} style={{ width: '100%', height: 180, objectFit: 'cover' }} />
+                ) : (
+                  <div
+                    style={{
+                      width: '100%',
+                      height: 180,
+                      backgroundColor: '#eee',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      color: '#999'
+                    }}
+                  >
+                    لا توجد صورة
+                  </div>
                 )}
+                <div style={{ padding: 15 }}>
+                  <h3 style={{ marginBottom: 10 }}>{h.name}</h3>
+                  <p style={{ fontSize: 14, color: '#555', marginBottom: 10 }}>{h.description}</p>
+                  <p style={{ fontSize: 13, color: '#888' }}>المحافظة: {h.cityId}</p>
+                  {h.isPopular && (
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        marginTop: 10,
+                        padding: '4px 10px',
+                        backgroundColor: '#ff5722',
+                        color: '#fff',
+                        borderRadius: 15,
+                        fontSize: 12
+                      }}
+                    >
+                      شائع
+                    </span>
+                  )}
+                </div>
               </div>
+            ))}
+          </div>
+
+          {/* زر تحميل المزيد يظهر فقط إذا لم تُعرض كل المستشفيات */}
+          {visibleCount < hospitals.length && (
+            <div style={{ textAlign: 'center', marginTop: 20 }}>
+              <button
+                onClick={handleLoadMore}
+                style={{
+                  backgroundColor: '#007bff',
+                  color: 'white',
+                  border: 'none',
+                  padding: '10px 20px',
+                  fontSize: 16,
+                  borderRadius: 6,
+                  cursor: 'pointer',
+                  transition: 'background-color 0.3s ease'
+                }}
+                onMouseOver={e => (e.currentTarget.style.backgroundColor = '#0056b3')}
+                onMouseOut={e => (e.currentTarget.style.backgroundColor = '#007bff')}
+              >
+                تحميل المزيد
+              </button>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
 
-    
     </div>
   );
 }
