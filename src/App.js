@@ -6,7 +6,13 @@ import Register from './Pages/Auth/Register';
 import Restaurant from './Pages/Restaurant/Restaurant';
 import Hospital from './Pages/Hospital/Hospital';
 import Holidays from './Pages/Holidays/Holidays';
+
+import ExploreCitiesSection from './Components/ExploreCitiesSection/ExploreCitiesSection';
+import CityDetails from './Pages/CityDetails/CityDetails';
+
 import CityBreaks from './Pages/CityBreaks/CityBreaks';
+import FixTripCityIds from './Pages/FixTripCityIds';
+
 import NavigationBar from './Components/NavigationBar/NavigationBar';
 import Footer from './Components/Footer/Footer';
 import TripDetails from './Pages/TripDetails/TripDetails';
@@ -36,6 +42,10 @@ function App() {
           <>
             <Route path="/" element={<Home />} />
             <Route path="/city-breaks" element={<CityBreaks />} />
+             <Route path="/explore-cities" element={<ExploreCitiesSection />} />
+             <Route path="/fix-city-ids" element={<FixTripCityIds />} />
+
+
             <Route path="/trip/:id" element={<TripDetails />} />
             
             <Route path="/admin-add" element={<AdminAddData />} />
@@ -44,6 +54,7 @@ function App() {
             <Route path="/holidays" element={<Holidays />} />
             <Route path="/restaurant" element={<Restaurant />} />
             <Route path="/hospital" element={<Hospital />} />
+            <Route path="/city/:id" element={<CityDetails />} />
           </>
         )}
       </Routes>

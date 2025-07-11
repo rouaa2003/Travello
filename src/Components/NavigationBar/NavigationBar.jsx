@@ -60,6 +60,7 @@ function NavigationBar() {
             >
               City breaks
             </Nav.Link>
+            <li><Link to="/explore-cities">Cities</Link></li>
             <Nav.Link
               as={Link}
               to="/restaurant"
