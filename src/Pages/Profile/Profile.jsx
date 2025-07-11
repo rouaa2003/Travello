@@ -1,27 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../AuthContext';
-
-import { 
+import {
   updateEmail, updateProfile, updatePassword,
-  reauthenticateWithCredential, EmailAuthProvider
 } from 'firebase/auth';
 import {
-  collection, query, where, getDocs, doc, deleteDoc, getDoc
+  collection, query, where, getDocs, doc,
+  deleteDoc, getDoc, updateDoc
 } from 'firebase/firestore';
 
 import { db } from '../../firebase';
-
 import './Profile.css';
 
 function Profile() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(user?.displayName || '');
   const [email, setEmail] = useState(user?.email || '');
   const [newName, setNewName] = useState(name);
   const [newEmail, setNewEmail] = useState(email);
-  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   
@@ -30,6 +27,9 @@ function Profile() {
 
   const [bookings, setBookings] = useState([]);
   const [loadingBookings, setLoadingBookings] = useState(true);
+
+  const [editingBookingId, setEditingBookingId] = useState(null);
+  const [newSeats, setNewSeats] = useState(1);
 
   useEffect(() => {
     setName(user?.displayName || '');
@@ -50,7 +50,6 @@ function Profile() {
         for (const docSnap of querySnapshot.docs) {
           const booking = { id: docSnap.id, ...docSnap.data() };
 
-          // جلب بيانات الرحلة المرتبطة بالحجز
           const tripDoc = await getDoc(doc(db, 'trips', booking.tripId));
           booking.tripDetails = tripDoc.exists() ? tripDoc.data() : null;
 
@@ -80,10 +79,42 @@ function Profile() {
     }
   };
 
-  // ...باقي الكود كما هو
+  const handleUpdateSeats = async (booking) => {
+    try {
+      const tripRef = doc(db, 'trips', booking.tripId);
+      const bookingRef = doc(db, 'bookings', booking.id);
 
+      const tripSnap = await getDoc(tripRef);
+      const tripData = tripSnap.data();
 
-  // تحديث البيانات الشخصية (الاسم، البريد)
+      const oldSeats = booking.seats || 1;
+      const seatDiff = newSeats - oldSeats;
+
+      if (tripData.availableSeats < seatDiff) {
+        setError('لا توجد مقاعد كافية متاحة.');
+        return;
+      }
+
+      await updateDoc(bookingRef, {
+        seats: newSeats
+      });
+
+      await updateDoc(tripRef, {
+        availableSeats: tripData.availableSeats - seatDiff
+      });
+
+      setBookings(prev =>
+        prev.map(b => b.id === booking.id ? { ...b, seats: newSeats } : b)
+      );
+
+      setEditingBookingId(null);
+      setMessage('تم تحديث الحجز بنجاح.');
+    } catch (err) {
+      console.error(err);
+      setError('فشل تحديث الحجز.');
+    }
+  };
+
   const handleSave = async () => {
     setMessage('');
     setError('');
@@ -96,18 +127,17 @@ function Profile() {
         await updateEmail(user, newEmail);
         setEmail(newEmail);
       }
-      // تغيير كلمة المرور (اختياري)
+
       if (newPassword) {
         if (newPassword !== confirmPassword) {
           setError('كلمتا المرور غير متطابقتين.');
           return;
         }
-        // هنا ممكن نضيف إعادة مصادقة لو طلب firebase ذلك
         await updatePassword(user, newPassword);
       }
+
       setMessage('تم تحديث بيانات الحساب بنجاح.');
       setIsEditing(false);
-      setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (err) {
@@ -164,7 +194,30 @@ function Profile() {
               <h4>{booking.tripDetails?.province || 'رحلة غير معروفة'}</h4>
               <p>📅 التاريخ: {booking.tripDetails?.date || 'غير متوفر'}</p>
               <p>💸 السعر: {booking.tripDetails?.price || 'غير متوفر'} ل.س</p>
-              <button onClick={() => handleCancelBooking(booking.id)}>إلغاء الحجز</button>
+              <p>👥 عدد المقاعد المحجوزة: {booking.seats || 1}</p>
+
+              {editingBookingId === booking.id ? (
+                <div className="edit-booking-form">
+                  <label>عدد المقاعد الجديد:</label>
+                  <input
+                    type="number"
+                    value={newSeats}
+                    min={1}
+                    max={booking.tripDetails?.availableSeats + (booking.seats || 1)}
+                    onChange={(e) => setNewSeats(Number(e.target.value))}
+                  />
+                  <button onClick={() => handleUpdateSeats(booking)}>حفظ التعديل</button>
+                  <button onClick={() => setEditingBookingId(null)}>إلغاء</button>
+                </div>
+              ) : (
+                <>
+                  <button onClick={() => handleCancelBooking(booking.id)}>إلغاء الحجز</button>
+                  <button onClick={() => {
+                    setEditingBookingId(booking.id);
+                    setNewSeats(booking.seats || 1);
+                  }}>تعديل الحجز</button>
+                </>
+              )}
             </div>
           ))}
         </div>

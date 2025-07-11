@@ -12,6 +12,8 @@ import Footer from './Components/Footer/Footer';
 import TripDetails from './Pages/TripDetails/TripDetails';
 import { useAuth } from './AuthContext';
 
+import AdminAddData from './AdminAddData';
+
 import Profile from './Pages/Profile/Profile';
 
 function App() {
@@ -36,6 +38,8 @@ function App() {
             <Route path="/city-breaks" element={<CityBreaks />} />
             <Route path="/trip/:id" element={<TripDetails />} />
             
+            <Route path="/admin-add" element={<AdminAddData />} />
+
             <Route path="/profile" element={<Profile />} />
             <Route path="/holidays" element={<Holidays />} />
             <Route path="/restaurant" element={<Restaurant />} />

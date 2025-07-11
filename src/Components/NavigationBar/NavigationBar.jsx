@@ -74,6 +74,12 @@ function NavigationBar() {
             >
               Hospital
             </Nav.Link>
+
+            <Link to="/admin-add" className="admin-add-btn">
+  إضافة بيانات
+</Link>
+
+
             {/* زر تسجيل الدخول يظهر فقط إذا المستخدم غير مسجل */}
             
             {!user && (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../../firebase';
-import { doc, getDoc, getDocs, collection, addDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, addDoc, updateDoc } from 'firebase/firestore';
 import './TripDetails.css';
 import { useAuth } from '../../AuthContext';
 
@@ -12,6 +12,7 @@ function TripDetails() {
   const [trip, setTrip] = useState(null);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
+  const [seatsToBook, setSeatsToBook] = useState(1); // ← جديد
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -30,8 +31,8 @@ function TripDetails() {
       return;
     }
 
-    if (trip.availableSeats <= 0) {
-      alert('لا توجد مقاعد متاحة حالياً.');
+    if (trip.availableSeats < seatsToBook) {
+      alert('عدد المقاعد المطلوبة غير متاح.');
       return;
     }
 
@@ -40,16 +41,16 @@ function TripDetails() {
       await addDoc(collection(db, 'bookings'), {
         userIds: [user.uid],
         tripId: trip.id,
+        seats: seatsToBook,
         createdAt: new Date().toISOString(),
       });
 
       const tripRef = doc(db, 'trips', trip.id);
       await updateDoc(tripRef, {
-        availableSeats: trip.availableSeats - 1,
+        availableSeats: trip.availableSeats - seatsToBook,
       });
 
       setBookingSuccess(true);
-
       const updatedTrip = await getDoc(tripRef);
       setTrip({ id: updatedTrip.id, ...updatedTrip.data() });
     } catch (error) {
@@ -69,6 +70,18 @@ function TripDetails() {
       <p><strong>🎟 المقاعد المتاحة:</strong> {trip.availableSeats} / {trip.maxSeats}</p>
 
       <div className="booking-form">
+        <label>عدد المقاعد المطلوبة:</label>
+        <select
+          value={seatsToBook}
+          onChange={(e) => setSeatsToBook(Number(e.target.value))}
+        >
+          {Array.from({ length: Math.min(trip.availableSeats, 10) }, (_, i) => (
+            <option key={i + 1} value={i + 1}>
+              {i + 1} {i === 0 ? 'مقعد' : 'مقاعد'}
+            </option>
+          ))}
+        </select>
+
         <button 
           onClick={handleBooking} 
           disabled={trip.availableSeats <= 0 || isBooking}

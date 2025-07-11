@@ -1,0 +1,139 @@
+.admin-form-container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  direction: rtl;
+}
+
+.admin-form-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.admin-form-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #444;
+}
+
+.admin-form-container input,
+.admin-form-container textarea,
+.admin-form-container select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.admin-form-container button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.admin-form-container button:hover {
+  background-color: #0b5ed7;
+}
+
+.success-msg {
+  text-align: center;
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.error-msg {
+  text-align: center;
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.admin-form-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', sans-serif;
+  direction: rtl;
+}
+
+.admin-form-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #222;
+  font-size: 24px;
+}
+
+.admin-form-group {
+  margin-bottom: 20px;
+}
+
+.admin-form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.admin-form-group input,
+.admin-form-group textarea,
+.admin-form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.admin-form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.admin-form-container button {
+  width: 100%;
+  padding: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.admin-form-container button:hover {
+  background-color: #0056b3;
+}
+
+.success-msg {
+  margin-top: 20px;
+  color: green;
+  text-align: center;
+  font-weight: bold;
+}
+
+.error-msg {
+  margin-top: 20px;
+  color: red;
+  text-align: center;
+  font-weight: bold;
+}
