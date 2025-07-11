@@ -3,9 +3,9 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './Pages/Home/Home';
 import Login from './Pages/Auth/Login';
 import Register from './Pages/Auth/Register';
-import Restaurant from './Pages/Restaurant/Restaurant';
+import RestaurantsPage from './Pages/RestaurantsPage/RestaurantsPage';
 import Hospital from './Pages/Hospital/Hospital';
-import Holidays from './Pages/Holidays/Holidays';
+import PlacesPage from './Pages/PlacesPage/PlacesPage';
 
 import ExploreCitiesSection from './Components/ExploreCitiesSection/ExploreCitiesSection';
 import CityDetails from './Pages/CityDetails/CityDetails';
@@ -51,8 +51,8 @@ function App() {
             <Route path="/admin-add" element={<AdminAddData />} />
 
             <Route path="/profile" element={<Profile />} />
-            <Route path="/holidays" element={<Holidays />} />
-            <Route path="/restaurant" element={<Restaurant />} />
+            <Route path="/places" element={<PlacesPage />} />
+            <Route path="/restaurants" element={<RestaurantsPage />} />
             <Route path="/hospital" element={<Hospital />} />
             <Route path="/city/:id" element={<CityDetails />} />
           </>

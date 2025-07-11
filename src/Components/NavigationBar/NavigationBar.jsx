@@ -47,12 +47,12 @@ function NavigationBar() {
               Home
             </Nav.Link>
             <Nav.Link
-              as={Link}
-              to="/holidays"
-              className={`text-light ${activeLink === '/holidays' ? 'active-link' : ''}`}
-            >
-              Landmarks
-            </Nav.Link>
+  as={Link}
+  to="/places"
+  className={`text-light ${activeLink === '/placespage' ? 'active-link' : ''}`}
+>
+  Popular Places
+</Nav.Link>
             <Nav.Link
               as={Link}
               to="/city-breaks"
@@ -63,10 +63,10 @@ function NavigationBar() {
             <li><Link to="/explore-cities">Cities</Link></li>
             <Nav.Link
               as={Link}
-              to="/restaurant"
+              to="/restaurants"
               className={`text-light ${activeLink === '/restaurant' ? 'active-link' : ''}`}
             >
-              Restaurant
+              Restaurants
             </Nav.Link>
             <Nav.Link
               as={Link}
