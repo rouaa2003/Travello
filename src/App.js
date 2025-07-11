@@ -11,7 +11,7 @@ import NavigationBar from './Components/NavigationBar/NavigationBar';
 import Footer from './Components/Footer/Footer';
 import TripDetails from './Pages/TripDetails/TripDetails';
 import { useAuth } from './AuthContext';
-import Bookings from './Pages/Bookings/Bookings';
+
 import Profile from './Pages/Profile/Profile';
 
 function App() {
@@ -35,7 +35,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/city-breaks" element={<CityBreaks />} />
             <Route path="/trip/:id" element={<TripDetails />} />
-            <Route path="/bookings" element={<Bookings />} />
+            
             <Route path="/profile" element={<Profile />} />
             <Route path="/holidays" element={<Holidays />} />
             <Route path="/restaurant" element={<Restaurant />} />

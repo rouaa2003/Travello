@@ -75,9 +75,7 @@ function NavigationBar() {
               Hospital
             </Nav.Link>
             {/* زر تسجيل الدخول يظهر فقط إذا المستخدم غير مسجل */}
-            <Nav.Link as={Link} to="/bookings" className={`text-light ${activeLink === '/bookings' ? 'active-link' : ''}`}>
-      حجوزاتي
-    </Nav.Link>
+            
             {!user && (
               <Nav.Link as={Link} to="/login" className="text-light">
                 Log in
