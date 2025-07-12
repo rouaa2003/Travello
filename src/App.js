@@ -9,8 +9,8 @@ import PlacesPage from './Pages/PlacesPage/PlacesPage';
 
 import ExploreCitiesSection from './Components/ExploreCitiesSection/ExploreCitiesSection';
 import CityDetails from './Pages/CityDetails/CityDetails';
+import AllAvailableTrips from './Pages/AllAvailableTrips/AllAvailableTrips'
 
-import CityBreaks from './Pages/CityBreaks/CityBreaks';
 import FixTripCityIds from './Pages/FixTripCityIds';
 
 import NavigationBar from './Components/NavigationBar/NavigationBar';
@@ -41,7 +41,7 @@ function App() {
         ) : (
           <>
             <Route path="/" element={<Home />} />
-            <Route path="/city-breaks" element={<CityBreaks />} />
+            
              <Route path="/explore-cities" element={<ExploreCitiesSection />} />
              <Route path="/fix-city-ids" element={<FixTripCityIds />} />
 
@@ -49,7 +49,7 @@ function App() {
             <Route path="/trip/:id" element={<TripDetails />} />
             
             <Route path="/admin-add" element={<AdminAddData />} />
-
+            <Route path="/trips" element={<AllAvailableTrips />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/places" element={<PlacesPage />} />
             <Route path="/restaurants" element={<RestaurantsPage />} />

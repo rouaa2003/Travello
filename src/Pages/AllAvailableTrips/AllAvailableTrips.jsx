@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
-import './AllCityBreaks.css';
+import './AllAvailableTrips.css';
 import { useNavigate } from 'react-router-dom';
 
-function AllCityBreaks() {
+function AllAvailableTrips() {
   const [trips, setTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ function AllCityBreaks() {
       try {
         const tripsSnapshot = await getDocs(collection(db, 'trips'));
         const tripsList = tripsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        console.log('Fetched trips:', tripsList);
         setTrips(tripsList);
       } catch (error) {
         console.error('Failed to fetch trips:', error);
@@ -23,6 +24,9 @@ function AllCityBreaks() {
     };
     fetchTrips();
   }, []);
+
+  console.log('الصورة:', trips);
+
 
   return (
     <div className="all-city-breaks">
@@ -36,6 +40,8 @@ function AllCityBreaks() {
         <div className="trips-grid">
           {trips.map((trip) => (
             <div className="trip-card" key={trip.id}>
+              
+              <img src={trip.imgUrl} alt={trip.province} className="trip-img" />
               <h3>{trip.province}</h3>
               <p>📅 {trip.date}</p>
               <p>💸 السعر: {trip.price} ل.س</p>
@@ -51,4 +57,4 @@ function AllCityBreaks() {
   );
 }
 
-export default AllCityBreaks;
+export default AllAvailableTrips;

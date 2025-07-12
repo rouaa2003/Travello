@@ -3,7 +3,7 @@ import './NavigationBar.css';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import AirplaneLogo from '../../Assets/Icons/airplane.svg';
 import { useAuth } from '../../AuthContext';
 
@@ -53,15 +53,7 @@ function NavigationBar() {
 >
   Popular Places
 </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/city-breaks"
-              className={`text-light ${activeLink === '/city-breaks' ? 'active-link' : ''}`}
-            >
-              City breaks
-            </Nav.Link>
-            <li><Link to="/explore-cities">Cities</Link></li>
-            <Nav.Link
+<Nav.Link
               as={Link}
               to="/restaurants"
               className={`text-light ${activeLink === '/restaurant' ? 'active-link' : ''}`}
@@ -75,7 +67,32 @@ function NavigationBar() {
             >
               Hospital
             </Nav.Link>
+            <Nav.Link
+              as={Link}
+              to="/trips"
+              className={`text-light ${activeLink === '/trips' ? 'active-link' : ''}`}
+            >
+              Available Trips
+            </Nav.Link>
+            <Nav.Link 
+            as={Link}
+            to={"/explore-cities"}
+            className={`text-light ${activeLink === '/explore-cities' ? 'active-link' : ''}`}
+             >Cities
+              </Nav.Link>
+            {user && (
+            <>
+            <Nav.Link as={Link} to="/profile" className={`text-light ${activeLink === '/profile' ? 'active-link' : ''}`}>
+      Profile
+    </Nav.Link>
+            <button className='btn btn-outline-light ms-3' onClick={handleLogout}>
+              Log out
+            </button>
+            
+            </>
+          )}
 
+          
             <Link to="/admin-add" className="admin-add-btn">
   إضافة بيانات
 </Link>
@@ -91,17 +108,7 @@ function NavigationBar() {
           </Nav>
 
           {/* زر تسجيل الخروج يظهر فقط إذا المستخدم مسجل دخول */}
-          {user && (
-            <>
-            <Nav.Link as={Link} to="/profile" className={`text-light ${activeLink === '/profile' ? 'active-link' : ''}`}>
-      Profile
-    </Nav.Link>
-            <button className='btn btn-outline-light ms-3' onClick={handleLogout}>
-              Log out
-            </button>
-            
-            </>
-          )}
+          
         </Navbar.Collapse>
       </Container>
     </Navbar>

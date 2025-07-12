@@ -15,7 +15,9 @@ function ExploreCitiesSection() {
         const citiesData = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
-        }));
+        })
+      );
+      console.log('مدينة:', citiesData);
         setCities(citiesData);
       } catch (error) {
         console.error('فشل تحميل المدن:', error);
@@ -35,7 +37,7 @@ function ExploreCitiesSection() {
       <div className="cities-grid">
         {cities.slice(0, visibleCount).map(city => (
           <Link to={`/city/${city.id}`} className="city-card" key={city.id}>
-            <img src={city.imageUrl} alt={city.name} className="city-image" />
+            <img src={city.imgUrl} alt={city.name} className="city-image" />
             <h3>{city.name}</h3>
           </Link>
         ))}
