@@ -1,32 +1,53 @@
+/* خلفية النافبار */
 .navbar {
-    background-color: var(--primary-bg-color);
+  background-color: var(--primary-bg-color);
+  transition: background-color 0.3s ease-in-out;
 }
-
+#root > div > nav > div{
+  margin-left: 10px;
+  margin-right: 10px;
+ 
+}
+/* زر التبديل في الوضع الصغير */
 .navbar .navbar-toggler {
-    border-color: white;
+   margin-right: 10px;
+  border-color: white;
 }
 
+/* أيقونة زر التبديل وشعار الطائرة */
 .navbar .navbar-toggler-icon,
 .navbar .navbar-brand img {
-    filter: invert();
+  filter: invert();
 }
 
 .navbar .navbar-brand img {
-    transform: rotate(45deg);
-    width: 1.5rem;
+  transform: rotate(45deg);
+  width: 1.5rem;
 }
 
+/* تغيير الخلفية على الشاشات الصغيرة */
 @media screen and (max-width: 576px) {
-    .navbar {
-        background-color: var(--secondary-bg-color);
-    }
+  .navbar {
+    background-color: var(--secondary-bg-color);
+  }
 }
+
+/* تنسيقات الروابط داخل الـ Navbar */
+.nav-link {
+  color: white !important;
+  transition: color 0.3s ease;
+  font-weight: 500;
+  padding: 10px 15px;
+}
+
+/* عند التحديد أو المرور */
 .nav-link:hover,
 .nav-link:focus,
 .nav-link.active-link {
   color: rgb(246, 255, 0) !important;
 }
 
+/* زر إضافة بيانات للمشرف */
 .admin-add-btn {
   padding: 8px 16px;
   background-color: #0d6efd;
@@ -35,8 +56,24 @@
   text-decoration: none;
   margin-left: 10px;
   font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
+/* تأثير عند المرور على زر المشرف */
 .admin-add-btn:hover {
   background-color: #0b5ed7;
+}
+
+/* زر تسجيل الخروج */
+.btn-outline-light {
+  padding: 8px 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: 1px solid white;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-outline-light:hover {
+  background-color: white;
+  color: #0d6efd;
 }

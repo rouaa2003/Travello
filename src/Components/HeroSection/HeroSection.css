@@ -1,39 +1,67 @@
+/* الخلفيات مع تدرج عمودي واضح */
 .carousel-item1 {
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.40)), url(../../Assets/Images/header-img1.jpg);
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)), url(../../Assets/Images/header-img1.jpg);
 }
 
 .carousel-item2 {
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.30)), url(../../Assets/Images/royal1.jpg);
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url(../../Assets/Images/royal1.jpg);
 }
 
 .carousel-item3 {
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.50)), url(../../Assets/Images/destinations-hero-bg.jpg);
-}
-.carousel-item4 {
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.40)), url(../../Assets/Images/hospital-hero-bg.jpg);
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2)), url(../../Assets/Images/destinations-hero-bg.jpg);
 }
 
+.carousel-item4 {
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)), url(../../Assets/Images/hospital-hero-bg.jpg);
+}
+
+/* إعدادات الخلفية */
 .carousel-item1,
 .carousel-item2,
 .carousel-item3,
 .carousel-item4 {
-    background-size: cover;
-    background-position: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-size 0.5s ease-in-out;
+}
+
+
+
+/* نص الكاروسيل */
+.carousel-caption h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.carousel-caption p {
+  font-size: 1.25rem;
+  color: #eeeeee;
+  text-align: right;
+  max-width: 700px;
+  line-height: 1.7;
+  direction: rtl;
 }
 
 @media screen and (max-width: 992px) {
-    .carousel-item1 {
-        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.50)), url(../../Assets/Images/header-img1.jpg);
-    }
-    
-    .carousel-item2 {
-        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.50)), url(../../Assets/Images/royal1.jpg);
-    }
-    
-    .carousel-item3 {
-        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.40)), url(../../Assets/Images/destinations-hero-bg.jpg);
-    }
-    .carousel-item4 {
-        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.40)), url(../../Assets/Images/hospital-hero-bg.jpg);
-    }
+  .carousel-item1 {
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(../../Assets/Images/header-img1.jpg);
+  }
+
+  .carousel-item2 {
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(../../Assets/Images/royal1.jpg);
+  }
+
+  .carousel-item3 {
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../../Assets/Images/destinations-hero-bg.jpg);
+  }
+
+  .carousel-item4 {
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../../Assets/Images/hospital-hero-bg.jpg);
+  }
+
+
 }

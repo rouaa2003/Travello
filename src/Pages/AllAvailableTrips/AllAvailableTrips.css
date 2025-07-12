@@ -1,4 +1,5 @@
 .all-city-breaks {
+ 
   padding: 40px 20px;
   background-color: #f7f7f7;
   text-align: center;
@@ -6,6 +7,7 @@
 }
 
 .section-title {
+  margin-top: 40px;
   font-size: 32px;
   font-weight: bold;
   margin-bottom: 40px;
@@ -58,7 +60,7 @@
 .book-btn {
   margin-top: 15px;
   padding: 10px 22px;
-  background-color: #007bff;
+  background-color: #198754;
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -68,7 +70,7 @@
 }
 
 .book-btn:hover {
-  background-color: #0056b3;
+  background-color: #19875483;
 }
 
 .load-more-circle {

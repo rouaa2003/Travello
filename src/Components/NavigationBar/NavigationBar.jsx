@@ -28,7 +28,7 @@ function NavigationBar() {
 
   return (
     <Navbar expand='lg' className='position-absolute w-100 z-2'>
-      <Container>
+      <Container className='nav-con'>
         <Navbar.Brand className='text-light'>
           <Link to='/' className='text-decoration-none text-light d-flex'>
             <img className='me-2' src={AirplaneLogo} alt="logo" />

@@ -75,3 +75,20 @@
 .login-link a:hover {
   text-decoration: underline;
 }
+.register-form select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  transition: border-color 0.3s ease;
+}
+
+.register-form select:focus {
+  border-color: #33691e;
+  outline: none;
+  box-shadow: 0 0 3px rgba(13, 253, 41, 0.5);
+}

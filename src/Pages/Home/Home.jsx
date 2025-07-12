@@ -1,9 +1,9 @@
 import React from 'react';
 import './Home.css';
 import HeroSection from '../../Components/HeroSection/HeroSection';
-import LastHolidaysSection from '../../Components/LastHolidaysSection/LastHolidaysSection';
+import LatestTrips from '../../Components/LatestTrips/LatestTrips';
 import RecommendedSection from '../../Components/RecommendedSection/RecommendedSection';
-import RecentHolidays from '../../Components/RecentHolidays/RecentHolidays';
+
 import NeedInspirationSection from '../../Components/NeedInspiration/NeedInspirationSection';
 import HomePlacesSection from '../../Components/HomePlacesSection/HomePlacesSection';
 import HomeRestaurantsSection from '../../Components/HomeRestaurantsSection/HomeRestaurantsSection';
@@ -25,7 +25,7 @@ function Home() {
                 <RecommendedSection itemRecommendedTitle='Recommended for you' />
             </div>
 
-            <RecentHolidays />
+            <LatestTrips />
             <NeedInspirationSection />
         </div>
     )

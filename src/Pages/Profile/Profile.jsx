@@ -21,15 +21,50 @@ function Profile() {
   const [newEmail, setNewEmail] = useState(email);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  
+  const [newCity, setNewCity] = useState('');
+  const [cityOptions, setCityOptions] = useState([]);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [userData, setUserData] = useState(null);
 
   const [bookings, setBookings] = useState([]);
   const [loadingBookings, setLoadingBookings] = useState(true);
-
   const [editingBookingId, setEditingBookingId] = useState(null);
   const [newSeats, setNewSeats] = useState(1);
+
+  // جلب بيانات المستخدم
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user) return;
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          setUserData(data);
+          setNewCity(data.city || '');
+        }
+      } catch (err) {
+        console.error("فشل جلب بيانات المستخدم:", err);
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
+
+  // جلب المدن من قاعدة البيانات
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, 'cities'));
+        const cities = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
+        setCityOptions(cities);
+      } catch (err) {
+        console.error("فشل تحميل المدن:", err);
+      }
+    };
+
+    fetchCities();
+  }, []);
 
   useEffect(() => {
     setName(user?.displayName || '');
@@ -38,6 +73,7 @@ function Profile() {
     setNewEmail(user?.email || '');
   }, [user]);
 
+  // جلب الحجوزات
   useEffect(() => {
     if (!user) return;
 
@@ -136,6 +172,13 @@ function Profile() {
         await updatePassword(user, newPassword);
       }
 
+      // تحديث المدينة في Firestore
+      if (newCity && user) {
+        await updateDoc(doc(db, 'users', user.uid), {
+          city: newCity
+        });
+      }
+
       setMessage('تم تحديث بيانات الحساب بنجاح.');
       setIsEditing(false);
       setNewPassword('');
@@ -154,6 +197,7 @@ function Profile() {
         <div className="profile-view">
           <p><strong>الاسم:</strong> {name || '-'}</p>
           <p><strong>البريد الإلكتروني:</strong> {email || '-'}</p>
+          <p><strong>المدينة:</strong> {userData?.city || '-'}</p>
           <button onClick={() => setIsEditing(true)}>تعديل</button>
         </div>
       ) : (
@@ -163,6 +207,14 @@ function Profile() {
 
           <label>البريد الإلكتروني</label>
           <input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} />
+
+          <label>المدينة</label>
+          <select value={newCity} onChange={e => setNewCity(e.target.value)}>
+            <option value="">اختر المدينة</option>
+            {cityOptions.map(city => (
+              <option key={city.id} value={city.id}>{city.name}</option>
+            ))}
+          </select>
 
           <label>كلمة المرور الجديدة</label>
           <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="اتركها فارغة إذا لا تريد التغيير" />
@@ -191,7 +243,7 @@ function Profile() {
         <div className="bookings-list">
           {bookings.map((booking) => (
             <div key={booking.id} className="booking-card">
-              <h4>{booking.tripDetails?.province || 'رحلة غير معروفة'}</h4>
+              <h4>{booking.tripDetails?.province || 'رحلة غير معروفة'} - {booking.tripDetails?.title}</h4>
               <p>📅 التاريخ: {booking.tripDetails?.date || 'غير متوفر'}</p>
               <p>💸 السعر: {booking.tripDetails?.price || 'غير متوفر'} ل.س</p>
               <p>👥 عدد المقاعد المحجوزة: {booking.seats || 1}</p>

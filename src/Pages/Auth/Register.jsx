@@ -1,20 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Register.css';
 import { useAuth } from '../../AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 
-// استيراد دوال Firestore
-import { db } from '../../firebase'; 
-import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
 
 function Register() {
   const { signup } = useAuth();
   const navigate = useNavigate();
+  const [username, setUsername] = useState('');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  const [city, setCity] = useState('');
+  const [cities, setCities] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
+
+  // جلب المدن من قاعدة البيانات
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, 'cities'));
+        const cityList = snapshot.docs.map(doc => ({
+          id: doc.id,
+          name: doc.data().name,
+        }));
+        setCities(cityList);
+      } catch (error) {
+        console.error('فشل تحميل المدن:', error);
+      }
+    };
+    fetchCities();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,22 +44,27 @@ function Register() {
       return;
     }
 
+    if (!city) {
+      setErrorMsg('يرجى اختيار المدينة.');
+      return;
+    }
+
     try {
-      // تسجيل المستخدم في Firebase Auth
       const userCredential = await signup(email, password);
       const user = userCredential.user;
 
-      // حفظ بيانات المستخدم الأساسية في Firestore في مجموعة users
       await setDoc(doc(db, 'users', user.uid), {
         email: user.email,
+        name: username,
+        cityId: city,
+        isAdmin:false,
         createdAt: new Date().toISOString(),
-        // أضف أي بيانات إضافية تريد تخزينها هنا، مثل الاسم، الهاتف، إلخ
       });
 
       navigate('/');
     } catch (error) {
-      setErrorMsg('فشل إنشاء الحساب. تأكد من صحة البيانات.');
       console.error('Register error:', error);
+      setErrorMsg('فشل إنشاء الحساب. تأكد من صحة البيانات.');
     }
   };
 
@@ -48,6 +72,15 @@ function Register() {
     <div className="register-container">
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>إنشاء حساب جديد</h2>
+        <label htmlFor="username">اسم المستخدم</label>
+        <input
+          id="username"
+          type="text"
+          placeholder="user name"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
 
         <label htmlFor="email">البريد الإلكتروني</label>
         <input
@@ -78,6 +111,19 @@ function Register() {
           onChange={(e) => setConfirm(e.target.value)}
           required
         />
+
+        <label htmlFor="city">اختر مدينتك</label>
+        <select
+          id="city"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          required
+        >
+          <option value="">-- اختر مدينة --</option>
+          {cities.map(c => (
+            <option key={c.id} value={c.id}>{c.name}</option>
+          ))}
+        </select>
 
         {errorMsg && <p className="error-message">{errorMsg}</p>}
 

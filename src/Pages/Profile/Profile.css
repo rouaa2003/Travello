@@ -1,31 +1,35 @@
 .profile-container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #fff;
+  max-width: 650px;
+  margin: 0px auto;
+  padding: 25px 30px;
+  background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
+.profile-container h2{
+  margin-top: 40px;
+}
 .profile-container h2,
 .profile-container h3 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-weight: bold;
+  color: #333;
 }
 
 .profile-view p {
   font-size: 16px;
-  margin: 10px 0;
+  margin: 12px 0;
 }
 
 .profile-view button,
 .profile-edit button {
-  background-color: #007bff;
+  background-color:  #198754;
   border: none;
   color: white;
   padding: 10px 16px;
-  margin-top: 15px;
+  margin-top: 20px;
   cursor: pointer;
   border-radius: 6px;
   transition: background-color 0.3s ease;
@@ -33,26 +37,46 @@
 
 .profile-view button:hover,
 .profile-edit button:hover {
-  background-color: #0056b3;
+  background-color:  var(--primary-bg-color);
 }
 
 .profile-edit label {
   display: block;
-  margin: 10px 0 5px 0;
+  margin: 15px 0 5px;
   font-weight: 600;
+  color: #222;
 }
 
-.profile-edit input {
+.profile-edit input,
+.profile-edit select {
   width: 100%;
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
+  margin-bottom: 10px;
+  background-color: #fdfdfd;
+  transition: border 0.2s ease-in-out;
+}
+
+.profile-edit input:focus,
+.profile-edit select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.profile-edit select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
 }
 
 .buttons {
   display: flex;
-  gap: 10px;
+  gap: 12px;
+  margin-top: 15px;
 }
 
 .buttons button {
@@ -61,41 +85,59 @@
 
 .success-msg {
   color: green;
-  margin-top: 15px;
+  margin-top: 20px;
   text-align: center;
 }
 
 .error-msg {
   color: red;
-  margin-top: 15px;
+  margin-top: 20px;
   text-align: center;
 }
 
 .bookings-list {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .booking-card {
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 15px;
-  background: #fafafa;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  background: #f9f9f9;
 }
 
 .booking-card h4 {
-  margin: 0 0 8px 0;
+  margin: 0 0 8px;
+  color: #444;
+}
+
+.booking-card p {
+  margin: 5px 0;
+  font-size: 15px;
 }
 
 .booking-card button {
   background-color: #dc3545;
   border: none;
   color: white;
-  padding: 8px 12px;
+  padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
+  margin-right: 8px;
+  transition: background-color 0.3s ease;
 }
 
 .booking-card button:hover {
   background-color: #b52a37;
+}
+
+.edit-booking-form {
+  margin-top: 10px;
+}
+
+.edit-booking-form input {
+  width: 80px;
+  padding: 6px 8px;
+  margin: 8px 0;
 }
