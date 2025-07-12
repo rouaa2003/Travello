@@ -71,6 +71,32 @@
   background-color: #0056b3;
 }
 
+.load-more-circle {
+  width: 80px;
+  height: 80px;
+  background-color: white;
+  color: #aaa;
+  border: 1px solid #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 0 auto;
+  margin-bottom: 50%;
+  position: relative;
+  top: 40%;
+}
+
+.load-more-circle:hover {
+    background-color: #aaa;
+    color: white;
+    border: 1px solid white;
+}
+
 /* Responsive adjustments */
 @media (max-width: 480px) {
   .section-title {

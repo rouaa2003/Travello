@@ -34,10 +34,11 @@ function HomeRestaurantsSection() {
             </div>
           </div>
         ))}
-      </div>
-      <div className="button-wrapper">
+        <div className="button-wrapper">
         <Link to="/restaurants" className="show-more-button">عرض كل المطاعم</Link>
       </div>
+      </div>
+      
     </section>
   );
 }

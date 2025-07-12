@@ -34,10 +34,11 @@ function HomeHospitalsSection() {
             </div>
           </div>
         ))}
-      </div>
-      <div className="button-wrapper">
+        <div className="button-wrapper ">
         <Link to="/hospitals" className="show-more-button">عرض كل المشافي</Link>
       </div>
+      </div>
+      
     </section>
   );
 }

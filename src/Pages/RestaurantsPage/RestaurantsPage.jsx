@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { db } from '../../firebase'; // عدّل حسب مسار ملف firebase.js عندك
+import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import SecondHeroSection from '../../Components/SecondHeroSection/SecondHeroSection';
+import './RestaurantsPage.css'; // تأكدي من إنشاء هذا الملف وإضافة التنسيقات فيه
 
 function RestaurantsPage() {
   const [restaurants, setRestaurants] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(6); // عدد المطاعم المرئية حاليا
+  const [visibleCount, setVisibleCount] = useState(6);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,9 +16,9 @@ function RestaurantsPage() {
         const snapshot = await getDocs(colRef);
         const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setRestaurants(data);
-        setLoading(false);
       } catch (error) {
         console.error('خطأ في جلب المطاعم:', error);
+      } finally {
         setLoading(false);
       }
     };
@@ -30,54 +32,33 @@ function RestaurantsPage() {
   if (loading) return <p style={{ textAlign: 'center', marginTop: 50 }}>جاري التحميل...</p>;
 
   return (
-    <div>
-      {/* قائمة المطاعم */}
-      <div style={{ maxWidth: 1000, margin: '20px auto', padding: '0 15px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
+    <div className='destinations-page'>
+      <SecondHeroSection secondHeroTitle='Delicious Meals' />
+
+      <div className="restaurants-grid">
         {restaurants.slice(0, visibleCount).map(r => (
-          <div key={r.id} style={{ border: '1px solid #ddd', borderRadius: 8, overflow: 'hidden', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
+          <div className="restaurant-card" key={r.id}>
             {r.imgUrl ? (
-              <img
-                src={r.imgUrl}
-                alt={r.name}
-                style={{ width: '100%', height: 180, objectFit: 'cover' }}
-              />
+              <img src={r.imgUrl} alt={r.name} className="restaurant-img" />
             ) : (
-              <div style={{ width: '100%', height: 180, backgroundColor: '#eee', display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#999' }}>
-                لا توجد صورة
-              </div>
+              <div className="restaurant-placeholder">لا توجد صورة</div>
             )}
-            <div style={{ padding: 15 }}>
-              <h3 style={{ margin: '0 0 10px' }}>{r.name}</h3>
-              <p style={{ margin: '0 0 10px', color: '#555', fontSize: 14 }}>{r.description}</p>
-              <p style={{ fontSize: 13, color: '#888' }}>المحافظة: {r.cityId}</p>
-              {r.isPopular && <span style={{ display: 'inline-block', marginTop: 10, padding: '4px 10px', backgroundColor: '#ff5722', color: 'white', borderRadius: 15, fontSize: 12 }}>شائع</span>}
+            <div className="restaurant-content">
+              <h3>{r.name}</h3>
+              <p className="description">{r.description}</p>
+              <p className="city">المحافظة: {r.cityId}</p>
+              {r.isPopular && <span className="popular-badge">شائع</span>}
             </div>
           </div>
         ))}
+        {visibleCount < restaurants.length && (
+      <div className="load-more-circle" onClick={handleLoadMore}>
+       ›
+      </div>
+        )}
       </div>
 
-      {/* زر تحميل المزيد يظهر فقط إذا لم تُعرض كل المطاعم */}
-      {visibleCount < restaurants.length && (
-        <div style={{ textAlign: 'center', marginTop: 20 }}>
-          <button
-            onClick={handleLoadMore}
-            style={{
-              backgroundColor: '#007bff',
-              color: 'white',
-              border: 'none',
-              padding: '10px 20px',
-              fontSize: 16,
-              borderRadius: 6,
-              cursor: 'pointer',
-              transition: 'background-color 0.3s ease'
-            }}
-            onMouseOver={e => (e.currentTarget.style.backgroundColor = '#0056b3')}
-            onMouseOut={e => (e.currentTarget.style.backgroundColor = '#007bff')}
-          >
-            تحميل المزيد
-          </button>
-        </div>
-      )}
+      
     </div>
   );
 }

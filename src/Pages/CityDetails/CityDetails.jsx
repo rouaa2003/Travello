@@ -5,7 +5,7 @@ import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firesto
 import './CityDetails.css';
 
 function CityDetails() {
-  const { id } = useParams();
+  const { id } = useParams(); // ID المدينة من الرابط
   const [city, setCity] = useState(null);
   const [places, setPlaces] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
@@ -15,28 +15,25 @@ function CityDetails() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // جلب بيانات المدينة
         const cityDoc = await getDoc(doc(db, 'cities', id));
         setCity(cityDoc.data());
 
-        // جلب أماكن المدينة
         const fetchByType = async (collectionName, setter, isArray = false) => {
-  const q = query(
-    collection(db, collectionName),
-    isArray ? where('cityIds', 'array-contains', id) : where('cityId', '==', id)
-  );
-  const snapshot = await getDocs(q);
-  setter(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-};
-
+          const q = query(
+            collection(db, collectionName),
+            isArray ? where('cityIds', 'array-contains', id) : where('cityId', '==', id)
+          );
+          const snapshot = await getDocs(q);
+          setter(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        };
 
         await fetchByType('places', setPlaces);
         await fetchByType('restaurants', setRestaurants);
         await fetchByType('hospitals', setHospitals);
-        await fetchByType('trips', setTrips);
+        await fetchByType('trips', setTrips,true);
 
       } catch (error) {
-        console.error('فشل تحميل بيانات المدينة:', error);
+        console.error('فشل تحميل تفاصيل المدينة:', error);
       }
     };
 
@@ -48,18 +45,17 @@ function CityDetails() {
   return (
     <div className="city-details">
       <h2>{city.name}</h2>
-      <img src={city.imageUrl} alt={city.name} className="city-banner" />
+      <img src={city.imgUrl} alt={city.name} className="city-banner" />
 
       <section>
         <h3>📍 أماكن سياحية</h3>
         {places.length === 0 ? <p>لا توجد أماكن سياحية.</p> :
           <div className="cards">{places.map(place => (
             <div className="card" key={place.id}>
-              <img src={place.imageUrl} alt={place.name} />
+              <img src={place.imgUrl} alt={place.name} />
               <h4>{place.name}</h4>
             </div>
-          ))}</div>
-        }
+          ))}</div>}
       </section>
 
       <section>
@@ -67,11 +63,10 @@ function CityDetails() {
         {restaurants.length === 0 ? <p>لا توجد مطاعم.</p> :
           <div className="cards">{restaurants.map(rest => (
             <div className="card" key={rest.id}>
-              <img src={rest.imageUrl} alt={rest.name} />
+              <img src={rest.imgUrl} alt={rest.name} />
               <h4>{rest.name}</h4>
             </div>
-          ))}</div>
-        }
+          ))}</div>}
       </section>
 
       <section>
@@ -79,29 +74,25 @@ function CityDetails() {
         {hospitals.length === 0 ? <p>لا توجد مشافي.</p> :
           <div className="cards">{hospitals.map(hosp => (
             <div className="card" key={hosp.id}>
-              <img src={hosp.imageUrl} alt={hosp.name} />
+              <img src={hosp.imgUrl} alt={hosp.name} />
               <h4>{hosp.name}</h4>
             </div>
-          ))}</div>
-        }
+          ))}</div>}
       </section>
-       <section>
-  <h3>🚌 الرحلات المرتبطة</h3>
-  {trips.length === 0 ? <p>لا توجد رحلات حالياً.</p> :
-    <div className="cards">{trips.map(trip => (
-      <div className="card" key={trip.id}>
-        <img src={trip.imgUrl} alt={trip.title} />
-        <h4>{trip.title}</h4>
-        <p>📅 {trip.date}</p>
-        <p>💸 {trip.price} ل.س</p>
-        <a href={`/trip/${trip.id}`} className="btn">عرض التفاصيل</a>
-      </div>
-    ))}</div>
-  }
-</section>
- 
 
-
+      <section>
+        <h3>🚌 الرحلات المرتبطة</h3>
+        {trips.length === 0 ? <p>لا توجد رحلات حالياً.</p> :
+          <div className="cards">{trips.map(trip => (
+            <div className="card" key={trip.id}>
+              
+              <h4>{trip.title}</h4>
+              <p>📅 {trip.date}</p>
+              <p>💸 {trip.price} ل.س</p>
+              <a href={`/trip/${trip.id}`} className="btn">عرض التفاصيل</a>
+            </div>
+          ))}</div>}
+      </section>
     </div>
   );
 }

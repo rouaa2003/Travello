@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { db } from '../../firebase'; // عدّل المسار حسب موقعك
+import SecondHeroSection from '../../Components/SecondHeroSection/SecondHeroSection';
+import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import './PlacesPage.css';
 
 function PlacesPage() {
   const [places, setPlaces] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(6); // عدد الأماكن المرئية حاليا
+  const [visibleCount, setVisibleCount] = useState(5);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,9 +16,9 @@ function PlacesPage() {
         const placesSnapshot = await getDocs(placesCol);
         const placesList = placesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setPlaces(placesList);
-        setLoading(false);
       } catch (error) {
         console.error('خطأ في جلب الأماكن:', error);
+      } finally {
         setLoading(false);
       }
     };
@@ -26,14 +27,18 @@ function PlacesPage() {
   }, []);
 
   const handleLoadMore = () => {
-    setVisibleCount(prev => prev + 6);
+      const nextCount = visibleCount + 5;
+  setVisibleCount(Math.min(nextCount, places.length));
   };
 
-  if (loading) return <p style={{ textAlign: 'center', marginTop: 50 }}>جاري التحميل...</p>;
+  if (loading) {
+    return <p style={{ textAlign: 'center', marginTop: 50 }}>جارٍ تحميل الأماكن...</p>;
+  }
 
   return (
     <div className="places-page">
-      <h2 className="page-title">الأماكن المشهورة</h2>
+      <SecondHeroSection secondHeroTitle="Popular Places" />
+      
       <div className="places-grid">
         {places.slice(0, visibleCount).map(place => (
           <div key={place.id} className="place-card">
@@ -48,18 +53,20 @@ function PlacesPage() {
               {place.isPopular && <span className="popular-badge">شائع</span>}
               <p className="place-city">المحافظة: {place.cityId}</p>
             </div>
+            
           </div>
+          
         ))}
-      </div>
 
-      {/* زر تحميل المزيد يظهر فقط إذا لم تُعرض كل الأماكن */}
       {visibleCount < places.length && (
-        <div style={{ textAlign: 'center', marginTop: 20 }}>
-          <button onClick={handleLoadMore} className="load-more-button">
-            تحميل المزيد
-          </button>
-        </div>
-      )}
+      <div className="load-more-circle" onClick={handleLoadMore}>
+       ›
+      </div>
+        )}
+      </div>
+        
+      
+
     </div>
   );
 }

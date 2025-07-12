@@ -34,10 +34,11 @@ function HomePlacesSection() {
             </div>
           </div>
         ))}
-      </div>
-      <div className="button-wrapper">
+        <div className="button-wrapper">
         <Link to="/places" className="show-more-button">عرض كل الأماكن</Link>
       </div>
+      </div>
+      
     </section>
   );
 }

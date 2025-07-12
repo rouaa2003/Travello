@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 function ExploreCitiesSection() {
   const [cities, setCities] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(6); // عدد المدن المعروضة حالياً
+  const [visibleCount, setVisibleCount] = useState(10);
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -15,9 +15,7 @@ function ExploreCitiesSection() {
         const citiesData = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
-        })
-      );
-      console.log('مدينة:', citiesData);
+        }));
         setCities(citiesData);
       } catch (error) {
         console.error('فشل تحميل المدن:', error);
@@ -28,12 +26,13 @@ function ExploreCitiesSection() {
   }, []);
 
   const handleLoadMore = () => {
-    setVisibleCount(prev => prev + 6);
+    setVisibleCount(prev => prev + 5);
   };
 
   return (
     <div className="cities-section">
       <h2 className="section-title">استكشف المدن السورية</h2>
+
       <div className="cities-grid">
         {cities.slice(0, visibleCount).map(city => (
           <Link to={`/city/${city.id}`} className="city-card" key={city.id}>
@@ -41,19 +40,20 @@ function ExploreCitiesSection() {
             <h3>{city.name}</h3>
           </Link>
         ))}
-      </div>
 
-      {/* زر تحميل المزيد يظهر فقط إذا لم تُعرض كل المدن */}
-      {visibleCount < cities.length && (
-        <div style={{ textAlign: 'center', marginTop: 20 }}>
-          <button
+        {visibleCount < cities.length && (
+          <div
+            className="load-more-card"
             onClick={handleLoadMore}
-            className="load-more-button"
+            role="button"
+            tabIndex={0}
+            onKeyDown={e => { if (e.key === 'Enter') handleLoadMore(); }}
+            title="عرض المزيد"
           >
-            تحميل المزيد
-          </button>
-        </div>
-      )}
+            <span className="load-more-arrow">›</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
