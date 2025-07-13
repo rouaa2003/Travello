@@ -45,7 +45,7 @@ function AllAvailableTrips() {
         <div className="trips-grid">
           {trips.slice(0, visibleCount).map((trip) => (
             <div className="trip-card" key={trip.id}>
-              <img src={trip.imgUrl} alt={trip.province} className="trip-img" />
+              
               <h3>{trip.province}</h3>
               <p>📅 {trip.date}</p>
               <p>💸 السعر: {trip.price} ل.س</p>
