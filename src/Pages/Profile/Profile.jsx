@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../AuthContext';
+import { useAuth } from '../../AuthContext';  // تأكد من المسار
 import {
-  updateEmail, updateProfile, updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updateEmail,
+  updateProfile,
+  updatePassword
 } from 'firebase/auth';
+
 import {
-  collection, query, where, getDocs, doc,
-  deleteDoc, getDoc, updateDoc
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  deleteDoc,
+  getDoc,
+  updateDoc
 } from 'firebase/firestore';
 
 import { db } from '../../firebase';
@@ -14,44 +25,32 @@ import './Profile.css';
 function Profile() {
   const { user } = useAuth();
 
-  const [isEditing, setIsEditing] = useState(false);
+  // بيانات المستخدم الأساسية
   const [name, setName] = useState(user?.displayName || '');
   const [email, setEmail] = useState(user?.email || '');
   const [newName, setNewName] = useState(name);
   const [newEmail, setNewEmail] = useState(email);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
   const [newCity, setNewCity] = useState('');
   const [cityOptions, setCityOptions] = useState([]);
+  const [userData, setUserData] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const [userData, setUserData] = useState(null);
 
-  const [bookings, setBookings] = useState([]);
+  // الحجوزات
+  const [normalBookings, setNormalBookings] = useState([]);
+  const [customBookings, setCustomBookings] = useState([]);
   const [loadingBookings, setLoadingBookings] = useState(true);
+
+  // لتعديل عدد المقاعد في الحجوزات العادية
   const [editingBookingId, setEditingBookingId] = useState(null);
   const [newSeats, setNewSeats] = useState(1);
 
-  // جلب بيانات المستخدم
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (!user) return;
-      try {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-          const data = userDoc.data();
-          setUserData(data);
-          setNewCity(data.city || '');
-        }
-      } catch (err) {
-        console.error("فشل جلب بيانات المستخدم:", err);
-      }
-    };
-
-    fetchUserData();
-  }, [user]);
-
-  // جلب المدن من قاعدة البيانات
+  // جلب المدن من Firestore
+ 
   useEffect(() => {
     const fetchCities = async () => {
       try {
@@ -62,18 +61,29 @@ function Profile() {
         console.error("فشل تحميل المدن:", err);
       }
     };
-
     fetchCities();
   }, []);
 
-  useEffect(() => {
-    setName(user?.displayName || '');
-    setEmail(user?.email || '');
-    setNewName(user?.displayName || '');
-    setNewEmail(user?.email || '');
-  }, [user]);
 
-  // جلب الحجوزات
+  // لجلب بيانات المستخدم من Firestore مع cityId
+useEffect(() => {
+  const fetchUserData = async () => {
+    if (!user || cityOptions.length === 0) return; // ← تأكد أن المدن جاهزة
+
+    const docSnap = await getDoc(doc(db, 'users', user.uid));
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      setUserData(data);
+      setNewCity(data.cityId || '');
+    }
+  };
+
+  fetchUserData();
+}, [user, cityOptions]); // ← مهم جداً
+
+
+
+  // جلب الحجوزات العادية والمخصصة
   useEffect(() => {
     if (!user) return;
 
@@ -81,21 +91,25 @@ function Profile() {
       try {
         const q = query(collection(db, 'bookings'), where('userIds', 'array-contains', user.uid));
         const querySnapshot = await getDocs(q);
-        const bookingsData = [];
+
+        const normal = [];
+        const custom = [];
 
         for (const docSnap of querySnapshot.docs) {
           const booking = { id: docSnap.id, ...docSnap.data() };
-
-          const tripDoc = await getDoc(doc(db, 'trips', booking.tripId));
-          booking.tripDetails = tripDoc.exists() ? tripDoc.data() : null;
-
-          bookingsData.push(booking);
+          if (booking.customTrip) {
+            if (booking.userIds?.includes(user.uid)) custom.push(booking);
+          } else {
+            const tripDoc = await getDoc(doc(db, 'trips', booking.tripId));
+            booking.tripDetails = tripDoc.exists() ? tripDoc.data() : null;
+            normal.push(booking);
+          }
         }
 
-        setBookings(bookingsData);
-      } catch (error) {
-        setError('فشل تحميل الحجوزات.');
-        console.error(error);
+        setCustomBookings(custom);
+        setNormalBookings(normal);
+      } catch (err) {
+        console.error("فشل تحميل الحجوزات:", err);
       } finally {
         setLoadingBookings(false);
       }
@@ -104,109 +118,177 @@ function Profile() {
     fetchBookings();
   }, [user]);
 
-  const handleCancelBooking = async (bookingId) => {
-    if (!window.confirm('هل أنت متأكد من إلغاء الحجز؟')) return;
+  // تابع حفظ التعديلات مع إعادة التوثيق
+const handleSave = async () => {
+  setMessage('');
+  setError('');
 
-    try {
-      await deleteDoc(doc(db, 'bookings', bookingId));
-      setBookings(bookings.filter(b => b.id !== bookingId));
-    } catch (err) {
-      setError('فشل إلغاء الحجز.');
+  try {
+    if (!user) {
+      setError('المستخدم غير مسجل الدخول.');
+      return;
     }
-  };
 
-  const handleUpdateSeats = async (booking) => {
-    try {
-      const tripRef = doc(db, 'trips', booking.tripId);
-      const bookingRef = doc(db, 'bookings', booking.id);
+    const needsReauth = (newEmail !== email || newPassword);
 
-      const tripSnap = await getDoc(tripRef);
-      const tripData = tripSnap.data();
-
-      const oldSeats = booking.seats || 1;
-      const seatDiff = newSeats - oldSeats;
-
-      if (tripData.availableSeats < seatDiff) {
-        setError('لا توجد مقاعد كافية متاحة.');
+    // التحقق من كلمة المرور الحالية فقط عند الحاجة لإعادة التوثيق
+    if (needsReauth) {
+      if (!currentPassword) {
+        setError('يرجى إدخال كلمة المرور الحالية لتحديث البريد أو كلمة المرور.');
         return;
       }
 
-      await updateDoc(bookingRef, {
-        seats: newSeats
+      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      await reauthenticateWithCredential(user, credential);
+    }
+
+    // تحديث الاسم
+    if (newName !== name) {
+      await updateProfile(user, { displayName: newName });
+      setName(newName);
+    }
+
+    // تحديث البريد
+    if (newEmail !== email) {
+      await updateEmail(user, newEmail);
+      setEmail(newEmail);
+    }
+
+    // تحديث كلمة المرور
+    if (newPassword) {
+      if (newPassword !== confirmPassword) {
+        setError('كلمتا المرور غير متطابقتين.');
+        return;
+      }
+      await updatePassword(user, newPassword);
+    }
+
+    // تحديث المدينة في قاعدة البيانات
+    if (newCity && newCity !== userData?.cityId) {
+      await updateDoc(doc(db, 'users', user.uid), {
+        cityId: newCity,
       });
+    }
 
-      await updateDoc(tripRef, {
-        availableSeats: tripData.availableSeats - seatDiff
-      });
+    // إعادة تعيين الحقول والنجاح
+    setMessage('✅ تم تحديث بيانات الحساب بنجاح.');
+    setError('');
+    setIsEditing(false);
+    setNewPassword('');
+    setConfirmPassword('');
+    setCurrentPassword('');
+    setUserData(prev => ({ ...prev, cityId: newCity }));
 
-      setBookings(prev =>
-        prev.map(b => b.id === booking.id ? { ...b, seats: newSeats } : b)
-      );
+  } catch (err) {
+    console.error('خطأ في التحديث:', err);
+    if (err.code === 'auth/invalid-credential') {
+      setError('❌ كلمة المرور الحالية غير صحيحة. يرجى المحاولة مجددًا.');
+    } else if (err.code === 'auth/requires-recent-login') {
+      setError('❌ انتهت صلاحية تسجيل الدخول. يرجى تسجيل الخروج ثم الدخول مجددًا.');
+    } else if (err.code === 'auth/email-already-in-use') {
+      setError('❌ هذا البريد مستخدم مسبقًا من قبل حساب آخر.');
+    } else {
+      setError('❌ فشل التحديث. حدث خطأ غير متوقع.');
+    }
+  }
+};
 
-      setEditingBookingId(null);
-      setMessage('تم تحديث الحجز بنجاح.');
+
+
+  // إلغاء حجز
+  const handleCancelBooking = async (id) => {
+    if (!window.confirm('هل أنت متأكد من إلغاء الحجز؟')) return;
+    try {
+      await deleteDoc(doc(db, 'bookings', id));
+      setCustomBookings(prev => prev.filter(b => b.id !== id));
+      setNormalBookings(prev => prev.filter(b => b.id !== id));
+      setMessage('تم إلغاء الحجز بنجاح.');
     } catch (err) {
       console.error(err);
-      setError('فشل تحديث الحجز.');
+      setError('حدث خطأ أثناء إلغاء الحجز.');
     }
   };
 
-  const handleSave = async () => {
+  // تعديل عدد المقاعد في الحجوزات العادية
+  const handleUpdateSeats = async (booking) => {
     setMessage('');
     setError('');
     try {
-      if (newName !== name) {
-        await updateProfile(user, { displayName: newName });
-        setName(newName);
+      const tripRef = doc(db, 'trips', booking.tripId);
+      const bookingRef = doc(db, 'bookings', booking.id);
+      const tripSnap = await getDoc(tripRef);
+      if (!tripSnap.exists()) {
+        setError('الرحلة غير موجودة.');
+        return;
       }
-      if (newEmail !== email) {
-        await updateEmail(user, newEmail);
-        setEmail(newEmail);
+      const tripData = tripSnap.data();
+      const seatDiff = newSeats - (booking.seats || 1);
+
+      if (tripData.availableSeats < seatDiff) {
+        setError("لا توجد مقاعد كافية.");
+        return;
       }
 
-      if (newPassword) {
-        if (newPassword !== confirmPassword) {
-          setError('كلمتا المرور غير متطابقتين.');
-          return;
-        }
-        await updatePassword(user, newPassword);
-      }
+      await updateDoc(bookingRef, { seats: newSeats });
+      await updateDoc(tripRef, { availableSeats: tripData.availableSeats - seatDiff });
 
-      // تحديث المدينة في Firestore
-      if (newCity && user) {
-        await updateDoc(doc(db, 'users', user.uid), {
-          city: newCity
-        });
-      }
+      setNormalBookings(prev =>
+        prev.map(b => (b.id === booking.id ? { ...b, seats: newSeats } : b))
+      );
 
-      setMessage('تم تحديث بيانات الحساب بنجاح.');
-      setIsEditing(false);
-      setNewPassword('');
-      setConfirmPassword('');
+      setEditingBookingId(null);
+      setMessage('تم التعديل بنجاح');
     } catch (err) {
-      setError('حدث خطأ أثناء تحديث البيانات. قد تحتاج إلى تسجيل الدخول مجددًا.');
       console.error(err);
+      setError('فشل تعديل الحجز.');
     }
+       
   };
 
+const cityIdTrimmed = userData?.cityId?.trim();
+const selectedCity = cityOptions.find(city => city.id === cityIdTrimmed)?.name;
+console.log(selectedCity)
+console.log('cityId raw value:', JSON.stringify(userData?.cityId));
+
   return (
+    
     <div className="profile-container">
-      <h2>حسابي</h2>
+      <h2>الملف الشخصي</h2>
 
       {!isEditing ? (
         <div className="profile-view">
+          
           <p><strong>الاسم:</strong> {name || '-'}</p>
-          <p><strong>البريد الإلكتروني:</strong> {email || '-'}</p>
-          <p><strong>المدينة:</strong> {userData?.city || '-'}</p>
-          <button onClick={() => setIsEditing(true)}>تعديل</button>
+          <p><strong>البريد:</strong> {email || '-'}</p>
+       
+       <p><strong>المدينة:</strong> {
+  cityOptions.length > 0 && userData?.cityId
+    ? cityOptions.find(city => city.id === userData.cityId?.trim())?.name || '-'
+    : '...'
+}</p>
+
+
+
+          <button className='p-btn' onClick={() => setIsEditing(true)}>تعديل</button>
         </div>
       ) : (
         <div className="profile-edit">
+          {message && <p className="success-msg">{message}</p>}
+{error && <p className="error-msg">{error}</p>}
+
           <label>الاسم</label>
-          <input type="text" value={newName} onChange={e => setNewName(e.target.value)} />
+          <input
+            type="text"
+            value={newName}
+            onChange={e => setNewName(e.target.value)}
+          />
 
           <label>البريد الإلكتروني</label>
-          <input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} />
+          <input
+            type="email"
+            value={newEmail}
+            onChange={e => setNewEmail(e.target.value)}
+          />
 
           <label>المدينة</label>
           <select value={newCity} onChange={e => setNewCity(e.target.value)}>
@@ -216,62 +298,102 @@ function Profile() {
             ))}
           </select>
 
+          <label>كلمة المرور الحالية</label>
+          <input
+            type="password"
+            value={currentPassword}
+            onChange={e => setCurrentPassword(e.target.value)}
+            placeholder="أدخل كلمة المرور الحالية لإجراء التعديلات"
+          />
+
           <label>كلمة المرور الجديدة</label>
-          <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="اتركها فارغة إذا لا تريد التغيير" />
+          <input
+            type="password"
+            value={newPassword}
+            placeholder="اتركها فارغة إذا لا تريد التغيير"
+            onChange={e => setNewPassword(e.target.value)}
+          />
 
           <label>تأكيد كلمة المرور الجديدة</label>
-          <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={e => setConfirmPassword(e.target.value)}
+          />
 
           <div className="buttons">
-            <button onClick={handleSave}>حفظ</button>
-            <button onClick={() => setIsEditing(false)}>إلغاء</button>
+            <button className='p-btn' onClick={handleSave}>حفظ</button>
+            <button className='p-btn' onClick={() => setIsEditing(false)}>إلغاء</button>
           </div>
         </div>
       )}
 
-      {message && <p className="success-msg">{message}</p>}
-      {error && <p className="error-msg">{error}</p>}
-
       <hr />
 
-      <h3>حجوزاتي</h3>
       {loadingBookings ? (
         <p>جاري تحميل الحجوزات...</p>
-      ) : bookings.length === 0 ? (
-        <p>لا توجد حجوزات حالياً.</p>
       ) : (
-        <div className="bookings-list">
-          {bookings.map((booking) => (
-            <div key={booking.id} className="booking-card">
-              <h4>{booking.tripDetails?.province || 'رحلة غير معروفة'} - {booking.tripDetails?.title}</h4>
-              <p>📅 التاريخ: {booking.tripDetails?.date || 'غير متوفر'}</p>
-              <p>💸 السعر: {booking.tripDetails?.price || 'غير متوفر'} ل.س</p>
-              <p>👥 عدد المقاعد المحجوزة: {booking.seats || 1}</p>
+        <div className="booking-columns">
 
-              {editingBookingId === booking.id ? (
-                <div className="edit-booking-form">
-                  <label>عدد المقاعد الجديد:</label>
-                  <input
-                    type="number"
-                    value={newSeats}
-                    min={1}
-                    max={booking.tripDetails?.availableSeats + (booking.seats || 1)}
-                    onChange={(e) => setNewSeats(Number(e.target.value))}
-                  />
-                  <button onClick={() => handleUpdateSeats(booking)}>حفظ التعديل</button>
-                  <button onClick={() => setEditingBookingId(null)}>إلغاء</button>
+          {/* الحجوزات المخصصة */}
+          <div className="booking-section">
+            <h3>✳️ الرحلات المخصصة</h3>
+            {customBookings.length === 0 ? (
+              <p>لا توجد حجوزات مخصصة.</p>
+            ) : (
+              customBookings.map(booking => (
+                <div key={booking.id} className="booking-card">
+                  <h4>رحلة مخصصة</h4>
+                  <p>📅 التاريخ: {booking.tripDate?.toDate().toLocaleDateString() || '-'}</p>
+                  <p>⏳ المدة: {booking.tripDuration || '-'} أيام</p>
+                  <p>🏙 المدن: {booking.selectedCityIds?.length || 0}</p>
+                  <p>🗺 أماكن: {booking.selectedPlaceIds?.length || 0}</p>
+                  <p>🍽 مطاعم: {booking.selectedRestaurantIds?.length || 0}</p>
+                  <p>🏥 مشافي: {booking.selectedHospitalIds?.length || 0}</p>
+                  <button className='p-btn' onClick={() => handleCancelBooking(booking.id)}>إلغاء الحجز</button>
                 </div>
-              ) : (
-                <>
-                  <button onClick={() => handleCancelBooking(booking.id)}>إلغاء الحجز</button>
-                  <button onClick={() => {
-                    setEditingBookingId(booking.id);
-                    setNewSeats(booking.seats || 1);
-                  }}>تعديل الحجز</button>
-                </>
-              )}
-            </div>
-          ))}
+              ))
+            )}
+          </div>
+
+          {/* الحجوزات العادية */}
+          <div className="booking-section">
+            <h3>🚌 الرحلات العادية</h3>
+            {normalBookings.length === 0 ? (
+              <p>لا توجد حجوزات حالياً.</p>
+            ) : (
+              normalBookings.map(booking => (
+                <div key={booking.id} className="booking-card">
+                  <h4>{booking.tripDetails?.province || '-'} - {booking.tripDetails?.title || '-'}</h4>
+                  <p>📅 التاريخ: {booking.tripDetails?.date || '-'}</p>
+                  <p>💸 السعر: {booking.tripDetails?.price || '-'} ل.س</p>
+                  <p>👥 المقاعد: {booking.seats || 1}</p>
+
+                  {editingBookingId === booking.id ? (
+                    <div className="edit-booking-form">
+                      <input
+                        type="number"
+                        value={newSeats}
+                        min={1}
+                        max={(booking.tripDetails?.availableSeats || 0) + (booking.seats || 1)}
+                        onChange={e => setNewSeats(Number(e.target.value))}
+                      />
+                      <button className='p-btn' onClick={() => handleUpdateSeats(booking)}>حفظ</button>
+                      <button className='p-btn' onClick={() => setEditingBookingId(null)}>إلغاء</button>
+                    </div>
+                  ) : (
+                    <>
+                      <button className='p-btn' onClick={() => handleCancelBooking(booking.id)}>إلغاء</button>
+                      <button className='p-btn' onClick={() => {
+                        setEditingBookingId(booking.id);
+                        setNewSeats(booking.seats || 1);
+                      }}>تعديل</button>
+                    </>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
         </div>
       )}
     </div>

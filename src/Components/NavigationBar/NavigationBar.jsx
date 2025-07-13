@@ -74,6 +74,13 @@ function NavigationBar() {
             >
               Available Trips
             </Nav.Link>
+             <Nav.Link
+              as={Link}
+              to="/plan-your-trip"
+              className={`text-light ${activeLink === '/plan-your-trip' ? 'active-link' : ''}`}
+            >
+              Plan Your Trip
+            </Nav.Link>
             <Nav.Link 
             as={Link}
             to={"/explore-cities"}

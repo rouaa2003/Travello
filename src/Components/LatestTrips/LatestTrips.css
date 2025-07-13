@@ -10,6 +10,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
+  direction: rtl;
 }
 
 .trip-card {
@@ -59,13 +60,15 @@
   line-height: 1.4;
 }
 
-.button-wrapper {
+.button-wrapper-l {
   text-align: center;
-  
+  height: 280px;
+  height: 300px;
+  align-content: baseline;
 }
 
-.show-more-button {
-  display: block;
+.show-more-button-l {
+
   background-color: #198754;
   color: #fff;
   padding: 10px 20px;

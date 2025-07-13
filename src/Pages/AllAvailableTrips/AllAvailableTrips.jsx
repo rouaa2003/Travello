@@ -11,18 +11,21 @@ function AllAvailableTrips() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchTrips = async () => {
-      setIsLoading(true);
-      try {
-        const tripsSnapshot = await getDocs(collection(db, 'trips'));
-        const tripsList = tripsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        console.log('Fetched trips:', tripsList);
-        setTrips(tripsList);
-      } catch (error) {
-        console.error('Failed to fetch trips:', error);
-      }
-      setIsLoading(false);
-    };
+   const fetchTrips = async () => {
+  setIsLoading(true);
+  try {
+    const tripsSnapshot = await getDocs(collection(db, 'trips'));
+    const tripsList = tripsSnapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(trip => trip.customTrip !== true); // 🚫 لا تعرض الرحلات المخصصة
+    console.log('Fetched trips:', tripsList);
+    setTrips(tripsList);
+  } catch (error) {
+    console.error('Failed to fetch trips:', error);
+  }
+  setIsLoading(false);
+};
+
     fetchTrips();
   }, []);
 

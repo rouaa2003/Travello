@@ -6,7 +6,7 @@ import Register from './Pages/Auth/Register';
 import RestaurantsPage from './Pages/RestaurantsPage/RestaurantsPage';
 import Hospital from './Pages/Hospital/Hospital';
 import PlacesPage from './Pages/PlacesPage/PlacesPage';
-
+import PlanYourTrip from './Pages/PlanYourTrip/PlanYourTrip'
 import ExploreCitiesSection from './Components/ExploreCitiesSection/ExploreCitiesSection';
 import CityDetails from './Pages/CityDetails/CityDetails';
 import AllAvailableTrips from './Pages/AllAvailableTrips/AllAvailableTrips'
@@ -55,6 +55,7 @@ function App() {
             <Route path="/restaurants" element={<RestaurantsPage />} />
             <Route path="/hospital" element={<Hospital />} />
             <Route path="/city/:id" element={<CityDetails />} />
+             <Route path="/plan-your-trip" element={<PlanYourTrip />} />
           </>
         )}
       </Routes>
