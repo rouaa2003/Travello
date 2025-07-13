@@ -17,7 +17,10 @@ const Card = ({ data, selected, onClick }) => (
     onClick={onClick}
     className={`custom-card ${selected ? "selected" : ""}`}
   >
-    <img src={data.imgUrl || "https://via.placeholder.com/300x180"} alt={data.name} />
+    <img
+      src={data.imgUrl || "https://via.placeholder.com/300x180"}
+      alt={data.name}
+    />
     <div className="card-info">
       <h4>{data.name}</h4>
       <p>{data.cityId}</p>
@@ -43,6 +46,8 @@ const PlanYourTrip = () => {
   const [places, setPlaces] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [hospitals, setHospitals] = useState([]);
+  const [hotels, setHotels] = useState([]);
+  const [selectedHotels, setSelectedHotels] = useState(new Set());
 
   const [selectedPlaces, setSelectedPlaces] = useState(new Set());
   const [selectedRestaurants, setSelectedRestaurants] = useState(new Set());
@@ -53,12 +58,11 @@ const PlanYourTrip = () => {
   const [step, setStep] = useState(1);
   const [currentStep, setCurrentStep] = useState(1);
   const steps = [
-  { label: "المدن" },
-  { label: "الخيارات السياحية" },
-  { label: "التاريخ والمدة" },
-  { label: "المراجعة" },
-];
-
+    { label: "المدن" },
+    { label: "الخيارات السياحية" },
+    { label: "التاريخ والمدة" },
+    { label: "المراجعة" },
+  ];
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -80,9 +84,15 @@ const PlanYourTrip = () => {
     const fetchData = async (collectionName, setData) => {
       let results = [];
       for (const cityId of selectedCities) {
-        const q = query(collection(db, collectionName), where("cityId", "==", cityId));
+        const q = query(
+          collection(db, collectionName),
+          where("cityId", "==", cityId)
+        );
         const snap = await getDocs(q);
-        results = [...results, ...snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))];
+        results = [
+          ...results,
+          ...snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
+        ];
       }
       setData(results);
     };
@@ -90,6 +100,7 @@ const PlanYourTrip = () => {
     fetchData("places", setPlaces);
     fetchData("restaurants", setRestaurants);
     fetchData("hospitals", setHospitals);
+    fetchData("hotels", setHotels);
   }, [selectedCities]);
 
   const toggleSelection = (id, selectedSet, setSelectedSet) => {
@@ -106,16 +117,17 @@ const PlanYourTrip = () => {
 
   const handleSave = async () => {
     if (!currentUserId) return alert("يجب تسجيل الدخول أولاً.");
-    if (selectedCities.length === 0) return alert("اختر مدينة واحدة على الأقل.");
+    if (selectedCities.length === 0)
+      return alert("اختر مدينة واحدة على الأقل.");
     if (!tripDate) return alert("اختر تاريخ الرحلة.");
     if (tripDuration < 1) return alert("أدخل مدة صالحة.");
-      const today = new Date();
-        today.setHours(0, 0, 0, 0); // حتى يقارن بدون وقت
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // حتى يقارن بدون وقت
 
-        const selectedDate = new Date(tripDate);
-        if (selectedDate < today) {
-            return alert("⚠️ لا يمكن تحديد تاريخ في الماضي.");
-        }
+    const selectedDate = new Date(tripDate);
+    if (selectedDate < today) {
+      return alert("⚠️ لا يمكن تحديد تاريخ في الماضي.");
+    }
 
     const data = {
       userIds: [currentUserId],
@@ -123,6 +135,7 @@ const PlanYourTrip = () => {
       selectedPlaceIds: Array.from(selectedPlaces),
       selectedRestaurantIds: Array.from(selectedRestaurants),
       selectedHospitalIds: Array.from(selectedHospitals),
+      selectedHotelIds: Array.from(selectedHotels),
       tripDate: Timestamp.fromDate(new Date(tripDate)),
       tripDuration,
       createdAt: Timestamp.now(),
@@ -136,6 +149,7 @@ const PlanYourTrip = () => {
       setSelectedPlaces(new Set());
       setSelectedRestaurants(new Set());
       setSelectedHospitals(new Set());
+      setSelectedHotels(new Set());
       setTripDate("");
       setTripDuration(1);
       setStep(1);
@@ -147,20 +161,20 @@ const PlanYourTrip = () => {
   return (
     <div className="plan-trip-container">
       <h2 className="title">✈️ صمّم رحلتك الخاصة</h2>
-        {/* شريط التقدم */}
-<div className="my-progress-bar">
-  {steps.map((step, index) => (
-    <div
-      key={index}
-      className={`step ${currentStep === index + 1 ? "active" : ""} ${
-        currentStep > index + 1 ? "completed" : ""
-      }`}
-    >
-      <div className="circle">{index + 1}</div>
-      <div className="label">{step.label}</div>
-    </div>
-  ))}
-</div>
+      {/* شريط التقدم */}
+      <div className="my-progress-bar">
+        {steps.map((step, index) => (
+          <div
+            key={index}
+            className={`step ${currentStep === index + 1 ? "active" : ""} ${
+              currentStep > index + 1 ? "completed" : ""
+            }`}
+          >
+            <div className="circle">{index + 1}</div>
+            <div className="label">{step.label}</div>
+          </div>
+        ))}
+      </div>
 
       {step === 1 && (
         <>
@@ -179,7 +193,9 @@ const PlanYourTrip = () => {
                     key={id}
                     label={city?.name}
                     onRemove={() =>
-                      setSelectedCities(selectedCities.filter((cId) => cId !== id))
+                      setSelectedCities(
+                        selectedCities.filter((cId) => cId !== id)
+                      )
                     }
                   />
                 );
@@ -211,7 +227,9 @@ const PlanYourTrip = () => {
                 <Chip
                   key={id}
                   label={item?.name}
-                  onRemove={() => removeSelectedItem(id, selectedPlaces, setSelectedPlaces)}
+                  onRemove={() =>
+                    removeSelectedItem(id, selectedPlaces, setSelectedPlaces)
+                  }
                 />
               );
             })}
@@ -225,7 +243,11 @@ const PlanYourTrip = () => {
                 data={rest}
                 selected={selectedRestaurants.has(rest.id)}
                 onClick={() =>
-                  toggleSelection(rest.id, selectedRestaurants, setSelectedRestaurants)
+                  toggleSelection(
+                    rest.id,
+                    selectedRestaurants,
+                    setSelectedRestaurants
+                  )
                 }
               />
             ))}
@@ -237,7 +259,13 @@ const PlanYourTrip = () => {
                 <Chip
                   key={id}
                   label={item?.name}
-                  onRemove={() => removeSelectedItem(id, selectedRestaurants, setSelectedRestaurants)}
+                  onRemove={() =>
+                    removeSelectedItem(
+                      id,
+                      selectedRestaurants,
+                      setSelectedRestaurants
+                    )
+                  }
                 />
               );
             })}
@@ -251,7 +279,11 @@ const PlanYourTrip = () => {
                 data={hos}
                 selected={selectedHospitals.has(hos.id)}
                 onClick={() =>
-                  toggleSelection(hos.id, selectedHospitals, setSelectedHospitals)
+                  toggleSelection(
+                    hos.id,
+                    selectedHospitals,
+                    setSelectedHospitals
+                  )
                 }
               />
             ))}
@@ -263,7 +295,40 @@ const PlanYourTrip = () => {
                 <Chip
                   key={id}
                   label={item?.name}
-                  onRemove={() => removeSelectedItem(id, selectedHospitals, setSelectedHospitals)}
+                  onRemove={() =>
+                    removeSelectedItem(
+                      id,
+                      selectedHospitals,
+                      setSelectedHospitals
+                    )
+                  }
+                />
+              );
+            })}
+          </div>
+          {hotels.length > 0 && <h3>🏨 الفنادق</h3>}
+          <div className="cards-container">
+            {hotels.map((hotel) => (
+              <Card
+                key={hotel.id}
+                data={hotel}
+                selected={selectedHotels.has(hotel.id)}
+                onClick={() =>
+                  toggleSelection(hotel.id, selectedHotels, setSelectedHotels)
+                }
+              />
+            ))}
+          </div>
+          <div className="selected-chips">
+            {Array.from(selectedHotels).map((id) => {
+              const item = hotels.find((h) => h.id === id);
+              return (
+                <Chip
+                  key={id}
+                  label={item?.name}
+                  onRemove={() =>
+                    removeSelectedItem(id, selectedHotels, setSelectedHotels)
+                  }
                 />
               );
             })}
@@ -279,7 +344,7 @@ const PlanYourTrip = () => {
             min={new Date().toISOString().split("T")[0]}
             value={tripDate}
             onChange={(e) => setTripDate(e.target.value)}
-            />
+          />
           <label>⏳ المدة (بالأيام):</label>
           <input
             type="number"
@@ -294,10 +359,17 @@ const PlanYourTrip = () => {
         <div>
           <h3>🧾 ملخص رحلتك</h3>
           <ul>
-            <li>📍 المدن: {selectedCities.map(id => cities.find(c => c.id === id)?.name).join(", ")}</li>
+            <li>
+              📍 المدن:{" "}
+              {selectedCities
+                .map((id) => cities.find((c) => c.id === id)?.name)
+                .join(", ")}
+            </li>
             <li>🏛️ الأماكن المختارة: {selectedPlaces.size}</li>
             <li>🍽️ المطاعم المختارة: {selectedRestaurants.size}</li>
             <li>🏥 المشافي المختارة: {selectedHospitals.size}</li>
+            <li>🏨 الفنادق المختارة: {selectedHotels.size}</li>
+
             <li>📅 التاريخ: {tripDate}</li>
             <li>⏳ المدة: {tripDuration} يوم</li>
           </ul>
@@ -311,12 +383,12 @@ const PlanYourTrip = () => {
       <div className="step-navigation">
         {step > 1 && (
           <button className="step-button" onClick={() => setStep(step - 1)}>
-              السابق ➡️ 
+            السابق ➡️
           </button>
         )}
         {step < 4 && (
           <button className="step-button" onClick={() => setStep(step + 1)}>
-           ⬅️ التالي 
+            ⬅️ التالي
           </button>
         )}
       </div>
