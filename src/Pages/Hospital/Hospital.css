@@ -1,19 +1,18 @@
 .hospital-page .second-hero-section {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.50)), url(../../Assets/Images/hospital-hero-bg.jpg);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../../Assets/Images/hospital-hero-bg.jpg);
 }
 .hospital-page {
-  padding: 30px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .hospitals-list {
-
   margin: 20px auto;
   padding: 0 15px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
-    direction: rtl;
+  direction: rtl;
 }
 
 .hospital-card {
@@ -32,7 +31,7 @@
 }
 
 .hospital-image {
- width: 100%;
+  width: 100%;
   height: 190px;
   object-fit: cover;
   border-bottom: 1px solid #eee;
@@ -64,7 +63,7 @@
 }
 
 .hospital-content .desc {
- font-size: 15px;
+  font-size: 15px;
   color: #555;
   margin-bottom: 12px;
   line-height: 1.5;
@@ -109,11 +108,7 @@
 }
 
 .load-more-circle:hover {
-  background-color: #aaa;
+  background-color: #00892e;
   color: white;
   border: 1px solid white;
 }
-
-
-
-

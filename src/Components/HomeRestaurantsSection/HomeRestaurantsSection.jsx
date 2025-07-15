@@ -1,17 +1,17 @@
 // src/Components/HomeRestaurantsSection/HomeRestaurantsSection.jsx
-import React, { useEffect, useState } from 'react';
-import { db } from '../../firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import { Link } from 'react-router-dom';
-import '../HomeSection.css';
+import React, { useEffect, useState } from "react";
+import { db } from "../../firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { Link } from "react-router-dom";
+import "../HomeSection.css";
 
 function HomeRestaurantsSection() {
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
     const fetchRestaurants = async () => {
-      const snapshot = await getDocs(collection(db, 'restaurants'));
-      const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const snapshot = await getDocs(collection(db, "restaurants"));
+      const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setRestaurants(list.slice(0, 4));
     };
     fetchRestaurants();
@@ -21,7 +21,7 @@ function HomeRestaurantsSection() {
     <section className="home-section">
       <h2 className="section-title">مطاعم مميزة</h2>
       <div className="card-grid">
-        {restaurants.map(item => (
+        {restaurants.map((item) => (
           <div key={item.id} className="card">
             {item.imgUrl ? (
               <img src={item.imgUrl} alt={item.name} className="card-image" />
@@ -35,10 +35,11 @@ function HomeRestaurantsSection() {
           </div>
         ))}
         <div className="button-wrapper">
-        <Link to="/restaurants" className="show-more-button">عرض كل المطاعم</Link>
+          <Link to="/restaurants" className="show-all">
+            عرض كل المطاعم
+          </Link>
+        </div>
       </div>
-      </div>
-      
     </section>
   );
 }

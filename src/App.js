@@ -7,7 +7,7 @@ import RestaurantsPage from "./Pages/RestaurantsPage/RestaurantsPage";
 import Hospital from "./Pages/Hospital/Hospital";
 import PlacesPage from "./Pages/PlacesPage/PlacesPage";
 import PlanYourTrip from "./Pages/PlanYourTrip/PlanYourTrip";
-import ExploreCitiesSection from "./Components/ExploreCitiesSection/ExploreCitiesSection";
+import ExploreCitiesSection from "./Pages/ExploreCitiesSection/ExploreCitiesSection";
 import CityDetails from "./Pages/CityDetails/CityDetails";
 import AllAvailableTrips from "./Pages/AllAvailableTrips/AllAvailableTrips";
 import HotelsPage from "./Pages/HotelsPage/HotelsPage";

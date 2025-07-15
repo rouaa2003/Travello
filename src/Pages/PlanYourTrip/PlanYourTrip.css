@@ -6,6 +6,7 @@
   background: #f9fbfd;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  cursor: alias;
 }
 
 .title {
@@ -33,7 +34,8 @@
   cursor: pointer;
   box-shadow: inset 0 2px 5px rgba(0, 137, 46, 0.15);
 }
-.city-select:hover, .city-select:focus {
+.city-select:hover,
+.city-select:focus {
   border-color: #005a17;
   outline: none;
   background: #d4ebd4;
@@ -64,7 +66,8 @@
   background: #fff;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
   cursor: pointer;
-  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  transition: transform 0.35s ease, box-shadow 0.35s ease,
+    border-color 0.35s ease;
   position: relative;
   display: flex;
   flex-direction: column;

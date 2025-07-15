@@ -1,6 +1,6 @@
 .city-details {
   padding: 30px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .city-details h2 {
@@ -98,14 +98,14 @@ section h3 {
   align-items: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin: 50px auto ;
+  margin: 50px auto;
   margin-bottom: 50%;
   position: relative;
   top: 40%;
 }
 
 .load-more-circle:hover {
-  background-color: #aaa;
+  background-color: #00892e;
   color: white;
   border: 1px solid white;
 }

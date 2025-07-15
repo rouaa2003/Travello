@@ -34,7 +34,7 @@ function HomeHotelsSection() {
           </div>
         ))}
         <div className="button-wrapper">
-          <Link to="/hotels" className="show-more-button">
+          <Link to="/hotels" className="show-all">
             عرض كل الفنادق
           </Link>
         </div>

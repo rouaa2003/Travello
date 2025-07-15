@@ -1,76 +1,114 @@
-import React, { useEffect, useState } from 'react';
-import { db } from '../../firebase';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
-import './LatestTrips.css';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { db } from "../../firebase";
+import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
+import "./LatestTrips.css";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function LatestTrips() {
   const [trips, setTrips] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(5);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecentTrips = async () => {
       try {
-        const tripsRef = collection(db, 'trips');
-        const q = query(tripsRef, orderBy('date', 'desc'), limit(visibleCount)); // جلب فقط visibleCount رحلات
+        const tripsRef = collection(db, "trips");
+        const q = query(tripsRef, orderBy("tripDate", "desc"), limit(5));
         const querySnapshot = await getDocs(q);
 
-        const tripsList = querySnapshot.docs.map(doc => {
+        const tripsList = querySnapshot.docs.map((doc) => {
           const data = doc.data();
-
-          // تحويل تاريخ Firestore Timestamp إلى تاريخ قابل للعرض
-          let formattedDate = 'غير محدد';
-          if (data.date && data.date.seconds) {
-            formattedDate = new Date(data.date.seconds * 1000).toLocaleDateString('ar-EG');
+          let formattedDate = "غير محدد";
+          if (data.tripDate?.seconds) {
+            formattedDate = new Date(
+              data.tripDate.seconds * 1000
+            ).toLocaleDateString("ar-EG");
           }
+          const seatsBooked = data.seatsBooked || 0;
+          const maxSeats = data.maxSeats || 0;
+          const availableSeats = maxSeats - seatsBooked;
+
+          const formatDuration = (dur) => {
+            if (!dur) return "غير محددة";
+            return dur === 1 ? "يوم واحد" : `${dur} أيام`;
+          };
 
           return {
             id: doc.id,
             ...data,
             formattedDate,
+            availableSeats,
+            formattedDuration: formatDuration(data.tripDuration),
           };
         });
 
         setTrips(tripsList);
-        setLoading(false);
       } catch (error) {
-        console.error('خطأ في جلب الرحلات:', error);
+        console.error("خطأ في جلب الرحلات:", error);
+      } finally {
         setLoading(false);
       }
     };
 
     fetchRecentTrips();
-  }, [visibleCount]);
+  }, []);
 
-  if (loading) return <p style={{ textAlign: 'center', marginTop: 50 }}>جاري التحميل...</p>;
-  if (trips.length === 0) return <p style={{ textAlign: 'center', marginTop: 50 }}>لا توجد رحلات جديدة حالياً.</p>;
+  if (loading)
+    return (
+      <p style={{ textAlign: "center", marginTop: 50 }}>جاري التحميل...</p>
+    );
+  if (trips.length === 0)
+    return (
+      <p style={{ textAlign: "center", marginTop: 50 }}>
+        لا توجد رحلات جديدة حالياً.
+      </p>
+    );
 
   return (
-    <section className="recent-holidays">
-      <h2>أحدث الرحلات</h2>
-      <div className="trips-grid">
-        {trips.map(trip => (
-          <div key={trip.id} className="trip-card">
-            <div className="trip-info">
-              <h3>{trip.title}</h3>
-              <p>{trip.description}</p>
-              <p><strong>المحافظة:</strong> {trip.cityIds?.join(', ') || 'غير محددة'}</p>
-              <p><strong>التاريخ:</strong> {trip.formattedDate}</p>
-              <p><strong>المقاعد المتاحة:</strong> {trip.availableSeats} من {trip.maxSeats}</p>
-              <p><strong>السعر:</strong> {trip.price} ليرة</p>
-              <button className="book-btn" onClick={() => navigate(`/trip/${trip.id}`)}>
-                احجز الآن
+    <section className="home-section">
+      <h2 className="section-title">أحدث الرحلات</h2>
+      <div className="card-grid">
+        {trips.map((trip) => (
+          <div key={trip.id} className="card">
+            <div className="card-content">
+              <p>
+                <strong>الوجهة:</strong>{" "}
+                {trip.selectedCityIds?.join("، ") || "غير محددة"}
+              </p>
+              <p>
+                <strong>تاريخ الرحلة:</strong> {trip.formattedDate}
+              </p>
+              <p>
+                <strong>مدة الرحلة:</strong> {trip.formattedDuration}
+              </p>
+              <p>
+                <strong>المقاعد المتاحة:</strong> {trip.availableSeats} من{" "}
+                {trip.maxSeats || "غير معروف"}
+              </p>
+              {trip.price !== undefined && (
+                <p>
+                  <strong>السعر:</strong> {trip.price} ليرة
+                </p>
+              )}
+              <button
+                className="book-btn"
+                onClick={() => navigate(`/trip/${trip.id}`)}
+                disabled={trip.availableSeats <= 0}
+                title={
+                  trip.availableSeats <= 0 ? "لا توجد مقاعد متاحة" : "احجز الآن"
+                }
+              >
+                {trip.availableSeats <= 0 ? "مقاعد غير متاحة" : "احجز الآن"}
               </button>
             </div>
           </div>
         ))}
-        <div className="button-wrapper-l">
-          <Link to="/trips" className="show-more-button-l">عرض كل الرحلات</Link>
-        </div>
+        <Link to="/trips" className="show-all-l">
+          عرض كل الرحلات
+        </Link>
       </div>
+      <div className="button-wrapper"></div>
     </section>
   );
 }

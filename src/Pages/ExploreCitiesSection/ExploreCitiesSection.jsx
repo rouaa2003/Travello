@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../../firebase';
-import './ExploreCitiesSection.css';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
+import "./ExploreCitiesSection.css";
+import { Link } from "react-router-dom";
 
 function ExploreCitiesSection() {
   const [cities, setCities] = useState([]);
@@ -11,14 +11,14 @@ function ExploreCitiesSection() {
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'cities'));
-        const citiesData = querySnapshot.docs.map(doc => ({
+        const querySnapshot = await getDocs(collection(db, "cities"));
+        const citiesData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
         }));
         setCities(citiesData);
       } catch (error) {
-        console.error('فشل تحميل المدن:', error);
+        console.error("فشل تحميل المدن:", error);
       }
     };
 
@@ -26,7 +26,7 @@ function ExploreCitiesSection() {
   }, []);
 
   const handleLoadMore = () => {
-    setVisibleCount(prev => prev + 5);
+    setVisibleCount((prev) => prev + 5);
   };
 
   return (
@@ -34,7 +34,7 @@ function ExploreCitiesSection() {
       <h2 className="section-title">استكشف المدن السورية</h2>
 
       <div className="cities-grid">
-        {cities.slice(0, visibleCount).map(city => (
+        {cities.slice(0, visibleCount).map((city) => (
           <Link to={`/city/${city.id}`} className="city-card" key={city.id}>
             <img src={city.imgUrl} alt={city.name} className="city-image" />
             <h3>{city.name}</h3>
@@ -47,7 +47,9 @@ function ExploreCitiesSection() {
             onClick={handleLoadMore}
             role="button"
             tabIndex={0}
-            onKeyDown={e => { if (e.key === 'Enter') handleLoadMore(); }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleLoadMore();
+            }}
             title="عرض المزيد"
           >
             <span className="load-more-arrow">›</span>

@@ -56,7 +56,7 @@ const PlanYourTrip = () => {
   const [tripDate, setTripDate] = useState("");
   const [tripDuration, setTripDuration] = useState(1);
   const [step, setStep] = useState(1);
-  const [currentStep, setCurrentStep] = useState(1);
+
   const steps = [
     { label: "المدن" },
     { label: "الخيارات السياحية" },
@@ -163,15 +163,15 @@ const PlanYourTrip = () => {
       <h2 className="title">✈️ صمّم رحلتك الخاصة</h2>
       {/* شريط التقدم */}
       <div className="my-progress-bar">
-        {steps.map((step, index) => (
+        {steps.map((stepItem, index) => (
           <div
             key={index}
-            className={`step ${currentStep === index + 1 ? "active" : ""} ${
-              currentStep > index + 1 ? "completed" : ""
+            className={`step ${step === index + 1 ? "active" : ""} ${
+              step > index + 1 ? "completed" : ""
             }`}
           >
             <div className="circle">{index + 1}</div>
-            <div className="label">{step.label}</div>
+            <div className="label">{stepItem.label}</div>
           </div>
         ))}
       </div>
@@ -381,14 +381,14 @@ const PlanYourTrip = () => {
 
       {/* أزرار التنقل بين الخطوات */}
       <div className="step-navigation">
-        {step > 1 && (
-          <button className="step-button" onClick={() => setStep(step - 1)}>
-            السابق ➡️
-          </button>
-        )}
         {step < 4 && (
           <button className="step-button" onClick={() => setStep(step + 1)}>
             ⬅️ التالي
+          </button>
+        )}
+        {step > 1 && (
+          <button className="step-button" onClick={() => setStep(step - 1)}>
+            السابق ➡️
           </button>
         )}
       </div>

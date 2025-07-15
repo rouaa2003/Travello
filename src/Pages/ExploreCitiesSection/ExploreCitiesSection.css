@@ -14,14 +14,14 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
-    direction: rtl;
+  direction: rtl;
 }
 
 .city-card {
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   text-decoration: none;
   color: #222;
   transition: box-shadow 0.3s ease;
@@ -31,7 +31,7 @@
 }
 
 .city-card:hover {
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 .city-image {
@@ -63,11 +63,10 @@
   margin-bottom: 50%;
   position: relative;
   top: 40%;
-  
 }
 
 .load-more-card:hover {
-  background-color: #aaa;
+  background-color: #00892e;
   color: white;
   border: 1px solid white;
 }

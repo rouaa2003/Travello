@@ -1,59 +1,172 @@
-.trip-details {
-  padding: 40px 20px;
-  max-width: 600px;
-  margin: auto;
+.tripUnique-container {
+  padding: 30px 25px;
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  text-align: right;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 137, 46, 0.25);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
   direction: rtl;
 }
 
-.trip-details h2 {
-  color: #007bff;
+.tripUnique-title {
+  color: #00892e;
+  font-size: 2rem;
+  font-weight: 700;
   margin-bottom: 20px;
+  flex: 1 1 300px;
 }
 
-.trip-details p {
-  font-size: 18px;
-  margin-bottom: 12px;
-}
-.booking-form {
-  margin-top: 30px;
-  text-align: right;
+.tripUnique-info {
+  margin-top: 20px;
+  border-top: 1px solid #00892e33;
+  padding-top: 20px;
 }
 
-.booking-form label {
+.tripUnique-info p {
+  margin: 8px 0;
+  font-size: 1.1rem;
+}
+
+.tripUnique-bookingForm {
+  width: 400px;
+  background: #f0f8f5;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: inset 0 0 8px rgba(0, 137, 46, 0.1);
+  flex: 0 1 280px;
+  margin: 0 auto;
+}
+
+.tripUnique-bookingForm label {
   display: block;
   margin-bottom: 8px;
-  font-weight: bold;
+  font-weight: 600;
+  color: #006622;
 }
 
-.booking-form select {
+.tripUnique-select {
   width: 100%;
   padding: 8px;
-  font-size: 16px;
-  margin-bottom: 15px;
+  font-size: 1rem;
+  border: 2px solid #00892e;
+  border-radius: 10px;
+  outline: none;
 }
 
-.booking-form button {
-  background-color: #28a745;
-  color: white;
-  padding: 10px 20px;
-  font-size: 15px;
+.tripUnique-bookBtn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  background: #00892e;
+  color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 137, 46, 0.4);
+  transition: background 0.3s, box-shadow 0.3s;
 }
 
-.booking-form button:disabled {
-  background-color: #aaa;
+.tripUnique-bookBtn:disabled {
+  background: #a5d6a7;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
-.success-msg {
-  color: green;
-  font-weight: bold;
-  margin-top: 10px;
+.tripUnique-bookBtn:not(:disabled):hover {
+  background: #006622;
+  box-shadow: 0 8px 25px rgba(0, 137, 46, 0.7);
+}
+
+.tripUnique-successMsg {
+  margin-top: 12px;
+  color: #2e7d32;
+  font-weight: 700;
+  text-align: center;
+}
+
+.tripUnique-divider {
+  margin: 30px 0;
+  border: 0;
+  border-top: 2px solid #00892e33;
+  border-radius: 10px;
+}
+
+.tripUnique-relatedSection {
+  margin-bottom: 40px;
+}
+
+.tripUnique-relatedTitle {
+  margin-bottom: 16px;
+  color: #00892e;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #00892e;
+  padding-bottom: 6px;
+}
+
+.tripUnique-relatedItems {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.tripUnique-relatedCard {
+  width: 150px;
+  background: #f7faf7;
+  border-radius: 15px;
+  box-shadow: 0 8px 18px rgba(0, 137, 46, 0.15);
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.tripUnique-relatedCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(0, 137, 46, 0.3);
+}
+
+.tripUnique-relatedCard img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.tripUnique-relatedCard p {
+  padding: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #006622;
+  margin: 0;
+}
+
+.tripUnique-loading {
+  font-size: 1.2rem;
+  color: #00892e;
+  text-align: center;
+  padding: 40px 0;
+}
+
+@media (max-width: 768px) {
+  .tripUnique-relatedItems {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .tripUnique-container {
+    padding: 20px;
+  }
+  .tripUnique-bookingForm {
+    padding: 15px;
+  }
+  .tripUnique-title {
+    font-size: 1.6rem;
+  }
+  .tripUnique-relatedCard {
+    width: 100%;
+  }
 }

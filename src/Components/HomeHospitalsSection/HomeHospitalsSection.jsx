@@ -1,17 +1,17 @@
 // src/Components/HomeHospitalsSection/HomeHospitalsSection.jsx
-import React, { useEffect, useState } from 'react';
-import { db } from '../../firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import { Link } from 'react-router-dom';
-import '../HomeSection.css';
+import React, { useEffect, useState } from "react";
+import { db } from "../../firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { Link } from "react-router-dom";
+import "../HomeSection.css";
 
 function HomeHospitalsSection() {
   const [hospitals, setHospitals] = useState([]);
 
   useEffect(() => {
     const fetchHospitals = async () => {
-      const snapshot = await getDocs(collection(db, 'hospitals'));
-      const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const snapshot = await getDocs(collection(db, "hospitals"));
+      const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setHospitals(list.slice(0, 4));
     };
     fetchHospitals();
@@ -21,7 +21,7 @@ function HomeHospitalsSection() {
     <section className="home-section">
       <h2 className="section-title">المشافي</h2>
       <div className="card-grid">
-        {hospitals.map(item => (
+        {hospitals.map((item) => (
           <div key={item.id} className="card">
             {item.imgUrl ? (
               <img src={item.imgUrl} alt={item.name} className="card-image" />
@@ -35,10 +35,11 @@ function HomeHospitalsSection() {
           </div>
         ))}
         <div className="button-wrapper ">
-        <Link to="/hospitals" className="show-more-button">عرض كل المشافي</Link>
+          <Link to="/hospitals" className="show-all">
+            عرض كل المشافي
+          </Link>
+        </div>
       </div>
-      </div>
-      
     </section>
   );
 }

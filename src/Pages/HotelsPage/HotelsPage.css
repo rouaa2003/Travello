@@ -65,20 +65,27 @@
 }
 
 .load-more-circle {
-  width: 45px;
-  height: 45px;
-  background-color: #00892e;
-  color: white;
+  width: 80px;
+  height: 80px;
+  background-color: white;
+  color: #aaa;
+  border: 1px solid #aaa;
   font-size: 28px;
+  font-weight: bold;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
-  margin: 40px auto;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin: 0 auto;
+  margin-bottom: 50%;
+  position: relative;
+  top: 40%;
 }
 
 .load-more-circle:hover {
-  background-color: #0a6d17;
+  background-color: #00892e;
+  color: white;
+  border: 1px solid white;
 }

@@ -1,125 +1,105 @@
 .all-city-breaks {
- 
   padding: 40px 20px;
-  background-color: #f7f7f7;
+  background-color: #f0f5f1; /* خلفية هادئة أخضر فاتح */
   text-align: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  direction: rtl;
+  color: #004d14; /* لون نص غامق يناسب الأخضر */
+  min-height: 100vh;
 }
 
 .section-title {
   margin-top: 40px;
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 40px;
-  color: #222;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 50px;
+  color: #00892e; /* اللون الأساسي */
+  text-shadow: 1px 1px 3px rgba(0, 137, 46, 0.4);
 }
 
 .trips-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
   justify-items: center;
-    direction: rtl;
+  padding-bottom: 60px;
 }
 
 .trip-card {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  padding: 28px 24px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 137, 46, 0.15);
   width: 100%;
-  max-width: 320px;
+  max-width: 350px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: right;
+  border: 2px solid transparent;
 }
 
 .trip-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-}
-
-.trip-img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 15px;
+  transform: translateY(-10px);
+  box-shadow: 0 16px 40px rgba(0, 137, 46, 0.35);
+  border-color: #00892e;
 }
 
 .trip-card h3 {
-  margin: 0 0 12px;
-  font-size: 22px;
-  color: #0066cc;
+  margin-bottom: 14px;
+  font-size: 24px;
+  color: #005c1a;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
 .trip-card p {
-  margin: 6px 0;
-  color: #444;
-  font-size: 16px;
-  line-height: 1.4;
+  margin: 10px 0;
+  color: #2f4f2f;
+  font-size: 17px;
+  line-height: 1.5;
+  font-weight: 500;
 }
 
 .book-btn {
-  margin-top: 15px;
-  padding: 10px 22px;
-  background-color: #198754;
-  color: #fff;
+  margin-top: 22px;
+  padding: 12px 26px;
+  background-color: #00892e;
+  color: #ffffff;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
-  font-size: 15px;
-  transition: background-color 0.3s ease;
+  font-size: 17px;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0, 137, 46, 0.6);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .book-btn:hover {
-  background-color: #19875483;
+  background-color: #006622;
+  box-shadow: 0 6px 18px rgba(0, 102, 34, 0.8);
 }
 
-.load-more-circle {
-  width: 80px;
-  height: 80px;
-  background-color: white;
-  color: #aaa;
-  border: 1px solid #aaa;
-  font-size: 28px;
-  font-weight: bold;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 0 auto;
-  margin-bottom: 50%;
-  position: relative;
-  top: 40%;
-}
-
-.load-more-circle:hover {
-    background-color: #aaa;
-    color: white;
-    border: 1px solid white;
-}
-
-/* Responsive adjustments */
-@media (max-width: 480px) {
+/* Responsive */
+@media (max-width: 600px) {
   .section-title {
-    font-size: 24px;
+    font-size: 28px;
+    margin-bottom: 30px;
   }
 
   .trip-card {
-    padding: 16px;
     max-width: 100%;
+    padding: 20px 18px;
   }
 
   .trip-card h3 {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .trip-card p {
-    font-size: 14px;
+    font-size: 15px;
   }
 
-  .trip-img {
-    height: 160px;
+  .book-btn {
+    font-size: 15px;
+    padding: 10px 20px;
   }
 }
