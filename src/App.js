@@ -40,7 +40,7 @@ function App() {
           <Route path="*" element={<Navigate to="/login" replace />} />
         ) : (
           <>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home user={user} />} />
 
             <Route path="/explore-cities" element={<ExploreCitiesSection />} />
             <Route path="/fix-city-ids" element={<FixTripCityIds />} />

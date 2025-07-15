@@ -1,104 +1,98 @@
-import React, { useEffect, useState } from 'react';
-import './RecommendedSection.css';
+import React, { useEffect, useState } from "react";
+import { db } from "../../firebase";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import "../HomeSection.css";
+import { Link } from "react-router-dom";
 
-const suggestions = {
-  morning: [
-    {
-      id: 1,
-      name: 'فطور في مطعم أبو كمال',
-      description: 'ابدأ صباحك بأطيب الفطور الدمشقي الأصيل.',
-      imgUrl: '/images/OIP.webp',
-    },
-    {
-      id: 2,
-      name: 'جولة في سوق الحميدية',
-      description: 'استكشف الأسواق الشعبية وتذوق الحلويات.',
-      imgUrl: '/images/OIP1.webp',
-    },
-    {
-      id: 3,
-      name: 'زيارة متحف دمشق الوطني',
-      description: 'تعرف على التاريخ والثقافة الغنية لسوريا.',
-      imgUrl: '/images/OIP2.webp',
-    },
-  ],
-  afternoon: [
-    {
-      id: 4,
-      name: 'نزهة في حديقة تشرين',
-      description: 'استمتع بالهواء الطلق والمساحات الخضراء.',
-      imgUrl: '/images/OIP3.webp',
-    },
-    {
-      id: 5,
-      name: 'جولة على الأنهار في حلب',
-      description: 'تجول على ضفاف نهر بردى وتمتع بالمناظر الطبيعية.',
-      imgUrl: '/images/OIP4.webp',
-    },
-    {
-      id: 6,
-      name: 'استراحة قهوة في مقاهي السوق',
-      description: 'تمتع بقهوة عربية وسط أجواء الأسواق التقليدية.',
-      imgUrl: '/images/OIP5.webp',
-    },
-  ],
-  evening: [
-    {
-      id: 7,
-      name: 'عشاء في مطعم الحلبية',
-      description: 'تذوق أشهى الأطباق الحلبيّة الأصيلة.',
-      imgUrl: '/images/OIP6.webp',
-    },
-    {
-      id: 8,
-      name: 'مشاهدة عرض مسرحي في دار الأوبرا',
-      description: 'عيش أجواء الفن والثقافة السورية.',
-      imgUrl: '/images/OIP7.webp',
-    },
-    {
-      id: 9,
-      name: 'تجول ليلي في المدينة القديمة',
-      description: 'استمتع بالسهر في الأزقة القديمة والتسوق.',
-      imgUrl: '/images/OIP8.webp',
-    },
-  ]
-};
-
-function RecommendedSection({ itemRecommendedTitle }) {
-  const [timeOfDay, setTimeOfDay] = useState('morning');
-  const [currentSuggestions, setCurrentSuggestions] = useState([]);
+function RecommendedSection({ user }) {
+  const [places, setPlaces] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [userCityId, setUserCityId] = useState("");
 
   useEffect(() => {
-    const hour = new Date().getHours();
+    const fetchUserCityIdAndData = async () => {
+      try {
+        if (!user?.uid) return;
 
-    if (hour >= 6 && hour < 12) {
-      setTimeOfDay('morning');
-    } else if (hour >= 12 && hour < 18) {
-      setTimeOfDay('afternoon');
-    } else {
-      setTimeOfDay('evening');
-    }
-  }, []);
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
 
-  useEffect(() => {
-    setCurrentSuggestions(suggestions[timeOfDay] || []);
-  }, [timeOfDay]);
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          const cityId = userData.cityId;
+          setUserCityId(cityId);
+
+          const [placesSnapshot, restaurantsSnapshot] = await Promise.all([
+            getDocs(collection(db, "places")),
+            getDocs(collection(db, "restaurants")),
+          ]);
+
+          const placesData = placesSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+          const restaurantsData = restaurantsSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+          setPlaces(placesData.filter((p) => p.cityId === cityId));
+          setRestaurants(restaurantsData.filter((r) => r.cityId === cityId));
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("خطأ في تحميل التوصيات:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchUserCityIdAndData();
+  }, [user]);
+
+  if (loading) return <p>جارٍ تحميل التوصيات...</p>;
 
   return (
-    <section className="recommended-section">
-      <h2>{itemRecommendedTitle}</h2>
-      <div className="recommended-grid">
-        {currentSuggestions.map(item => (
-          <div key={item.id} className="recommended-card">
-            {item.imgUrl && (
-              <img src={item.imgUrl} alt={item.name} className="recommended-image" />
-            )}
-            <h3>{item.name}</h3>
-            <p>{item.description}</p>
+    <div className="home-section">
+      <h3 className="section-title">مقترحات لأجلك</h3>
+
+      <div className="card-grid">
+        {places.map((place) => (
+          <div key={place.id} className="card">
+            <img src={place.imgUrl} alt={place.name} className="card-image" />
+            <div className="card-content">
+              <h3>{place.name}</h3>
+              <p>{place.description}</p>
+            </div>
           </div>
         ))}
+
+        {restaurants.map((restaurant) => (
+          <div key={restaurant.id} className="card">
+            <img
+              src={restaurant.imgUrl}
+              alt={restaurant.name}
+              className="card-image"
+            />
+            <div className="card-content">
+              <h3>{restaurant.name}</h3>
+              <p>{restaurant.description}</p>
+            </div>
+          </div>
+        ))}
+        {userCityId && (
+          <div className="button-wrapper">
+            <Link to={`/city/${userCityId}`} className="show-all">
+              عرض كل الأماكن في مدينتك
+            </Link>
+          </div>
+        )}
       </div>
-    </section>
+
+      {/* ✅ زر "عرض الكل" */}
+    </div>
   );
 }
 

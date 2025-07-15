@@ -338,8 +338,41 @@ function Profile() {
   // إلغاء حجز
   const handleCancelBooking = async (id) => {
     if (!window.confirm("هل أنت متأكد من إلغاء الحجز؟")) return;
+
     try {
-      await deleteDoc(doc(db, "bookings", id));
+      const bookingRef = doc(db, "bookings", id);
+      const bookingSnap = await getDoc(bookingRef);
+
+      if (!bookingSnap.exists()) {
+        alert("الحجز غير موجود");
+        return;
+      }
+
+      const bookingData = bookingSnap.data();
+
+      // إذا كان الحجز جاهز وليس مخصص (customTrip=false أو غير موجود)
+      if (!bookingData.customTrip && bookingData.tripId) {
+        const tripRef = doc(db, "trips", bookingData.tripId);
+        const tripSnap = await getDoc(tripRef);
+
+        if (tripSnap.exists()) {
+          const tripData = tripSnap.data();
+          const seatsBookedInBooking =
+            bookingData.seatsBooked || bookingData.userIds.length || 0;
+          const updatedSeatsBooked =
+            (tripData.seatsBooked || 0) - seatsBookedInBooking;
+
+          // تحديث عدد المقاعد المحجوزة في الرحلة (لا تجعلها أقل من صفر)
+          await updateDoc(tripRef, {
+            seatsBooked: updatedSeatsBooked < 0 ? 0 : updatedSeatsBooked,
+          });
+        }
+      }
+
+      // حذف الحجز
+      await deleteDoc(bookingRef);
+
+      // تحديث حالة الواجهة
       setCustomBookings((prev) => prev.filter((b) => b.id !== id));
       setNormalBookings((prev) => prev.filter((b) => b.id !== id));
       setMessage("تم إلغاء الحجز بنجاح.");

@@ -4,16 +4,16 @@
 }
 
 .city-details h2 {
-  text-align: center;
-  margin-bottom: 25px;
-  font-size: 28px;
-  color: #333;
-  font-weight: bold;
+  margin-top: 50px;
+  font-size: 50px;
+  font-weight: 700;
+  margin-bottom: 50px;
+  color: #00892e;
+  text-shadow: 1px 1px 3px rgba(0, 137, 46, 0.4);
 }
 
 .city-banner {
   width: 100%;
-  max-height: 300px;
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 30px;
@@ -31,56 +31,85 @@ section h3 {
   padding-bottom: 5px;
 }
 
-.cards {
+.cards,
+.card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
+  direction: rtl;
 }
 
+/* دمج تعريفات الكارد */
 .card {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #f5fdf8, #e0f0e9);
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 137, 46, 0.15);
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #ddd;
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 14px 30px rgba(0, 137, 46, 0.3);
 }
 
-.card img {
+.card img,
+.card-image {
   width: 100%;
-  height: 150px;
+  height: 180px;
   object-fit: cover;
-}
-
-.card h4 {
-  margin: 10px;
-  font-size: 1.1rem;
-  color: #222;
-}
-
-.card p {
-  margin: 0 10px 10px;
-  font-size: 14px;
-  color: #666;
-}
-
-.card .btn {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  transition: transform 0.3s ease;
   display: block;
-  margin: 10px;
-  padding: 8px 12px;
-  background-color: #007bff;
-  color: white;
-  text-align: center;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 14px;
+  background-color: #eee;
+  border-radius: 12px 12px 0 0;
 }
 
-.card .btn:hover {
-  background-color: #0056b3;
+.card:hover img,
+.card:hover .card-image {
+  transform: scale(1.05);
+}
+
+.card-content {
+  padding: 12px 15px;
+}
+
+.card h4,
+.card-content h3 {
+  margin: 15px 15px 5px 15px;
+  font-size: 1.25rem;
+  color: #006622;
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.card p,
+.card-content p {
+  margin: 0 15px 15px 15px;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.4;
+  min-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.popular-badge {
+  display: inline-block;
+  background-color: #00892e;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin: 10px 15px;
+  box-shadow: 0 2px 6px rgba(0, 137, 46, 0.4);
 }
 
 /* زر تحميل المزيد */
@@ -108,4 +137,34 @@ section h3 {
   background-color: #00892e;
   color: white;
   border: 1px solid white;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 25px;
+  color: #222;
+}
+
+.button-wrapper {
+  text-align: center;
+  margin-top: 20px;
+  justify-items: center;
+  align-content: center;
+}
+
+.show-all {
+  display: inline-block;
+  background-color: #198754;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.show-all:hover {
+  background-color: #198754cc;
 }

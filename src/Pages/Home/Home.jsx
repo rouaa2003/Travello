@@ -9,7 +9,7 @@ import HomePlacesSection from "../../Components/HomePlacesSection/HomePlacesSect
 import HomeRestaurantsSection from "../../Components/HomeRestaurantsSection/HomeRestaurantsSection";
 import HomeHospitalsSection from "../../Components/HomeHospitalsSection/HomeHospitalsSection";
 
-function Home() {
+function Home({ user }) {
   return (
     <div className="home-page">
       <HeroSection />
@@ -18,9 +18,8 @@ function Home() {
       <HomeRestaurantsSection />
       <HomeHospitalsSection />
       <HomeHotelsSection />
-      <div className="my-4 my-sm-5">
-        <RecommendedSection itemRecommendedTitle="Recommended for you" />
-      </div>
+
+      <RecommendedSection user={user} />
 
       <LatestTrips />
       <NeedInspirationSection />
