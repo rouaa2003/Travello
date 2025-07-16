@@ -6,6 +6,8 @@ import "./AllAvailableTrips.css";
 
 function AllAvailableTrips() {
   const [trips, setTrips] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [filterCity, setFilterCity] = useState("");
   const [visibleCount, setVisibleCount] = useState(6);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -25,7 +27,22 @@ function AllAvailableTrips() {
       }
       setLoading(false);
     };
+
+    const fetchCities = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "cities"));
+        const citiesData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCities(citiesData);
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      }
+    };
+
     fetchTrips();
+    fetchCities();
   }, []);
 
   const formatDate = (date) => {
@@ -36,12 +53,23 @@ function AllAvailableTrips() {
 
   const formatDuration = (duration) => {
     if (!duration) return "غير متوفر";
-    return duration; // عرض النص كما هو لأنك قلت مخزنة مثل "5 أيام"
+    return duration;
   };
 
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + 6);
   };
+
+  const getCityNames = (cityIds) => {
+    return cityIds
+      ?.map((id) => cities.find((city) => city.id === id)?.name || id)
+      .join("، ");
+  };
+
+  // فلترة الرحلات حسب المدينة
+  const filteredTrips = trips.filter((trip) =>
+    filterCity ? trip.selectedCityIds?.includes(filterCity) : true
+  );
 
   if (loading)
     return (
@@ -50,7 +78,7 @@ function AllAvailableTrips() {
       </p>
     );
 
-  if (trips.length === 0)
+  if (filteredTrips.length === 0)
     return (
       <p style={{ textAlign: "center", marginTop: 50 }}>
         لا توجد رحلات متاحة حالياً
@@ -61,12 +89,31 @@ function AllAvailableTrips() {
     <div className="all-city-breaks">
       <h2 className="section-title">الرحلات المتوفرة</h2>
 
+      {/* فلترة حسب المدينة */}
+      <div
+        className="filter-container"
+        style={{ textAlign: "center", marginBottom: 20 }}
+      >
+        <select
+          value={filterCity}
+          onChange={(e) => setFilterCity(e.target.value)}
+          style={{ padding: "8px 12px", fontSize: 16 }}
+        >
+          <option value="">كل المدن</option>
+          {cities.map((city) => (
+            <option key={city.id} value={city.id}>
+              {city.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="trips-grid">
-        {trips.slice(0, visibleCount).map((trip) => (
+        {filteredTrips.slice(0, visibleCount).map((trip) => (
           <div key={trip.id} className="trip-card">
             <h3>
               {trip.selectedCityIds?.length > 0
-                ? trip.selectedCityIds.join("، ")
+                ? getCityNames(trip.selectedCityIds)
                 : trip.province || "غير معروف"}
             </h3>
             <p>📅 {formatDate(trip.tripDate)}</p>
@@ -90,7 +137,7 @@ function AllAvailableTrips() {
       </div>
 
       {/* زر تحميل المزيد */}
-      {visibleCount < trips.length && (
+      {visibleCount < filteredTrips.length && (
         <div
           className="load-more-circle"
           onClick={handleLoadMore}

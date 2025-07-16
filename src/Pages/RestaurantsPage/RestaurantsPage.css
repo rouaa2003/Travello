@@ -1,13 +1,14 @@
 .destinations-page .second-hero-section {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.50)), url(../../Assets/Images/destinations-hero-bg.jpg);
-    margin: 0 auto;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../../Assets/Images/destinations-hero-bg.jpg);
+  margin: 0 auto;
 }
 .restaurants-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
   padding: 40px 20px;
-    direction: rtl;
+  direction: rtl;
 }
 
 .restaurant-card {
@@ -16,6 +17,7 @@
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  max-width: 300px;
 }
 
 .restaurant-card:hover {
@@ -91,4 +93,36 @@
 .load-more-button:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+/* تنسيقات فخمة لمحرك البحث و الفلترة في RestaurantsPage */
+.filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+  direction: rtl;
+}
+
+.filters input[type="text"],
+.filters .f-select {
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 2px solid #00892e;
+  border-radius: 8px;
+  min-width: 350px;
+  background-color: #fff;
+  transition: 0.3s ease;
+  font-family: "Cairo", sans-serif;
+  text-align: right;
+  margin: 5px;
+  height: 50px;
+}
+
+.filters input[type="text"]:focus,
+.filters .f-select:focus {
+  border-color: #00892e;
+  background-color: #eee;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 137, 46, 0.1);
 }
