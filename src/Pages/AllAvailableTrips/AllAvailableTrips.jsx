@@ -134,24 +134,23 @@ function AllAvailableTrips() {
             </button>
           </div>
         ))}
+        {/* زر تحميل المزيد */}
+        {visibleCount < filteredTrips.length && (
+          <div
+            className="load-more-circle"
+            onClick={handleLoadMore}
+            style={{
+              cursor: "pointer",
+              textAlign: "center",
+              marginTop: 20,
+              fontSize: 30,
+              userSelect: "none",
+            }}
+          >
+            ›
+          </div>
+        )}
       </div>
-
-      {/* زر تحميل المزيد */}
-      {visibleCount < filteredTrips.length && (
-        <div
-          className="load-more-circle"
-          onClick={handleLoadMore}
-          style={{
-            cursor: "pointer",
-            textAlign: "center",
-            marginTop: 20,
-            fontSize: 30,
-            userSelect: "none",
-          }}
-        >
-          ›
-        </div>
-      )}
     </div>
   );
 }
