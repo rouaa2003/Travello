@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { db } from "../../firebase";
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import "./LatestTrips.css";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function LatestTrips() {
   const [trips, setTrips] = useState([]);
@@ -25,6 +24,7 @@ function LatestTrips() {
               data.tripDate.seconds * 1000
             ).toLocaleDateString("ar-EG");
           }
+
           const seatsBooked = data.seatsBooked || 0;
           const maxSeats = data.maxSeats || 0;
           const availableSeats = maxSeats - seatsBooked;
@@ -58,6 +58,7 @@ function LatestTrips() {
     return (
       <p style={{ textAlign: "center", marginTop: 50 }}>جاري التحميل...</p>
     );
+
   if (trips.length === 0)
     return (
       <p style={{ textAlign: "center", marginTop: 50 }}>
@@ -69,7 +70,7 @@ function LatestTrips() {
     <section className="home-section">
       <h2 className="section-title">أحدث الرحلات</h2>
       <div className="card-grid">
-        {trips.map((trip) => (
+        {trips.slice(0, 4).map((trip) => (
           <div key={trip.id} className="card">
             <div className="card-content">
               <p>
@@ -104,9 +105,12 @@ function LatestTrips() {
             </div>
           </div>
         ))}
-        <Link to="/trips" className="show-all-l">
-          عرض كل الرحلات
-        </Link>
+
+        {trips.length > 4 && (
+          <Link to="/trips" className="show-all-l">
+            عرض كل الرحلات
+          </Link>
+        )}
       </div>
       <div className="button-wrapper"></div>
     </section>

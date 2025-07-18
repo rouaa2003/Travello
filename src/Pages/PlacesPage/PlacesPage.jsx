@@ -7,7 +7,7 @@ import "./PlacesPage.css";
 function PlacesPage() {
   const [places, setPlaces] = useState([]);
   const [cities, setCities] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(5);
+  const [visibleCount, setVisibleCount] = useState(6);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCity, setFilterCity] = useState("");
@@ -48,7 +48,7 @@ function PlacesPage() {
   }, []);
 
   const handleLoadMore = () => {
-    const nextCount = visibleCount + 5;
+    const nextCount = visibleCount + 6;
     setVisibleCount(Math.min(nextCount, filteredPlaces.length));
   };
 
